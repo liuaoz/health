@@ -29,7 +29,7 @@ public final class FileUtil {
      * @return byte array
      * @throws IOException ex
      */
-    private static byte[] inputStream2ByteArray(InputStream in) throws IOException {
+    public static byte[] inputStream2ByteArray(InputStream in) throws IOException {
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024 * 4];
