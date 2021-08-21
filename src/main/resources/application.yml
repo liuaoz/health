@@ -1,5 +1,4 @@
 
-
 spring:
   datasource:
     username: root
@@ -8,3 +7,15 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
+  mvc:
+    servlet:
+      path: /health
+
+cloud:
+  baidu:
+    secretId: ${BAIDU_SECRET_ID:secretId}
+    secretKey: ${BAIDU_SECRET_KEY:secretKey}
+  kdxf:
+    appId: ${KDXF_APP_ID:appId}
+    appKey: ${KDXF_APP_KEY:appKey}
+    ocrUrl: https://webapi.xfyun.cn/v1/service/v1/ocr/general
