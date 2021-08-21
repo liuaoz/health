@@ -1,9 +1,14 @@
 package com.sun.health.entity;
 
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class BaseEntity {
+@MappedSuperclass
+public abstract class BaseEntity implements Serializable {
 
+    @Id
     private Long id;
 
     private String creator;
