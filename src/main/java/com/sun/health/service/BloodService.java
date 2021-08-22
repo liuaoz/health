@@ -3,6 +3,7 @@ package com.sun.health.service;
 import com.sun.health.core.util.JsonUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.entity.blood.BloodReportEntity;
+import com.sun.health.repository.blood.BloodRepository;
 import com.sun.health.service.tencent.TencentService;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.tencentcloudapi.ocr.v20181119.models.TextDetection;
@@ -20,6 +21,9 @@ import java.util.Objects;
  **/
 @Service
 public class BloodService extends AbstractService {
+
+    @Autowired
+    private BloodRepository bloodRepository;
 
     @Autowired
     private TencentService tencentService;
@@ -54,19 +58,21 @@ public class BloodService extends AbstractService {
                 bloodReportEntity.setResult(textDetections[index + 1].getDetectedText());
                 StringBuilder sb = new StringBuilder();
 
-                int i = index;
+                int i = index + 2;
                 while (i < textDetections.length && !StringUtil.isContainChinese(textDetections[i].getDetectedText())) {
                     sb.append(textDetections[i].getDetectedText());
                     i++;
-                    if (i < textDetections.length && StringUtil.isContainChinese(textDetections[i].getDetectedText())) {
-                        break;
-                    }
                 }
                 bloodReportEntity.setReference(sb.toString());
                 reportEntities.add(bloodReportEntity);
             });
+            save(reportEntities);
         }
         return reportEntities;
+    }
+
+    public void save(List<BloodReportEntity> list) {
+        bloodRepository.saveAll(list);
     }
 
 }
