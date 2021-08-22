@@ -1,4 +1,6 @@
-package com.sun.health.entity;
+package com.sun.health.entity.blood;
+
+import com.sun.health.entity.BaseEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,8 +11,8 @@ import javax.persistence.Table;
  * @since : 2021/8/21
  **/
 @Entity
-@Table(name = "tb_medical_report")
-public class MedicalReportEntity extends BaseEntity {
+@Table(name = "tb_blood_report")
+public class BloodReportEntity extends BaseEntity {
 
     private String item;
 

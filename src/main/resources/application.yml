@@ -14,6 +14,9 @@ spring:
       path: /health
 
 cloud:
+  tencent:
+    secretId: ${TENCENT_SECRET_ID:secretId}
+    secretKey: ${TENCENT_SECRET_KEY:secretKey}
   baidu:
     secretId: ${BAIDU_SECRET_ID:secretId}
     secretKey: ${BAIDU_SECRET_KEY:secretKey}
