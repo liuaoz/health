@@ -4,6 +4,9 @@ import com.sun.health.entity.blood.BloodReportEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author Matrix
  * @version v1.0.0
@@ -11,4 +14,8 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public interface BloodRepository extends JpaRepository<BloodReportEntity, Long> {
+
+    List<BloodReportEntity> findByItemAndMeasurementTime(String item, Date measurementTime);
+
+    int deleteByMeasurementTime(Date measurementTime);
 }
