@@ -9,6 +9,7 @@ import com.sun.health.service.tencent.TencentService;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.tencentcloudapi.ocr.v20181119.models.TextDetection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -21,6 +22,8 @@ import java.util.*;
  **/
 @Service
 public class BloodService extends AbstractService {
+
+    private static final String PARENT_DIR = "/Users/stonechen/father/";
 
     @Autowired
     private BloodRepository bloodRepository;
@@ -54,10 +57,23 @@ public class BloodService extends AbstractService {
      * @param date 检查日期, 格式为：yyyyMMdd
      */
     public void handle(String date) {
+        String parentDir = PARENT_DIR + date + "/";
+        File file = new File(parentDir);
+        File[] files = file.listFiles();
 
+        if (files == null) {
+        }
+        delete(date);
+
+        Arrays.stream(files).forEach(k -> {
+            String imageName = k.getName();
+            String imageUrl = parentDir + imageName;
+            List<BloodReportEntity> list = parse(imageUrl);
+            list.forEach(t -> System.out.println(String.format("%-40s", t.getItem().trim()) + String.format("%-40s", t.getResult().trim()) + String.format("%-40s", t.getReference().trim())));
+        });
     }
 
-    public void a(String imageName){
+    public void a(String imageName) {
 
     }
 
