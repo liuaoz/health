@@ -1,11 +1,15 @@
 package com.sun.health.controller;
 
+import com.sun.health.core.util.FileUtil;
 import com.sun.health.service.tencent.TencentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Matrix
@@ -22,6 +26,10 @@ public class TestController extends BaseController {
     @GetMapping("tencent")
     public void test(@RequestParam String fileName) {
         String imageUrl = "D://tmp//" + fileName;
-        tencentService.ocr(imageUrl);
+        try {
+            tencentService.ocr(FileUtil.toByteArrayByNio(new File(imageUrl)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
