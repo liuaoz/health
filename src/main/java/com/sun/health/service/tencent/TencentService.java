@@ -33,7 +33,7 @@ public class TencentService extends AbstractService {
             resp = client.GeneralBasicOCR(req);
             logger.info(GeneralBasicOCRResponse.toJsonString(resp));
         } catch (TencentCloudSDKException e) {
-            System.out.println(e.toString());
+            logger.error("tencent basic ocr error.", e);
         }
         return resp;
     }
