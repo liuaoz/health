@@ -80,6 +80,8 @@ public class BloodService extends AbstractService {
         File file = new File(parentDir);
         File[] files = file.listFiles();
 
+        List<String> failed = new ArrayList<>();
+
         if (files == null) {
             logger.warn("{} 没有检测报告单", date);
             return;
@@ -91,16 +93,19 @@ public class BloodService extends AbstractService {
             try {
                 parse(DateUtil.fromYyyyMMdd(date), FileUtil.toByteArrayByNio(k));
             } catch (Exception e) {
+                failed.add(k.getName());
                 logger.error("parse file error.file=" + k.getName(), e);
             }
 //            list.forEach(t -> System.out.println(String.format("%-40s", t.getItem().trim()) + String.format("%-40s", t.getResult().trim()) + String.format("%-40s", t.getReference().trim())));
         });
+        logger.info("{} 报告处理结果：[报告单总数：{}，失败的报告单：{}]", date, files.length, failed.toArray());
     }
 
     /**
      * parse report image
      */
-    public List<BloodReportEntity> parse(Date measurementTime, byte[] content) {
+    public void parse(Date measurementTime, byte[] content) {
+
 
         List<BloodReportEntity> reportEntities = new ArrayList<>();
 
@@ -149,7 +154,6 @@ public class BloodService extends AbstractService {
         } else {
             logger.warn("Tencent basic ocr response is invalid.");
         }
-        return reportEntities;
     }
 
     public void save(List<BloodReportEntity> list) {
