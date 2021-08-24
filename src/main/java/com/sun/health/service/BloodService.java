@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -89,14 +88,12 @@ public class BloodService extends AbstractService {
         delete(date);
 
         Arrays.stream(files).forEach(k -> {
-            List<BloodReportEntity> list;
             try {
-                list = parse(DateUtil.fromYyyyMMdd(date), FileUtil.toByteArrayByNio(k));
-            } catch (IOException e) {
-                list = new ArrayList<>();
+                parse(DateUtil.fromYyyyMMdd(date), FileUtil.toByteArrayByNio(k));
+            } catch (Exception e) {
                 logger.error("parse file error.file=" + k.getName(), e);
             }
-            list.forEach(t -> System.out.println(String.format("%-40s", t.getItem().trim()) + String.format("%-40s", t.getResult().trim()) + String.format("%-40s", t.getReference().trim())));
+//            list.forEach(t -> System.out.println(String.format("%-40s", t.getItem().trim()) + String.format("%-40s", t.getResult().trim()) + String.format("%-40s", t.getReference().trim())));
         });
     }
 
