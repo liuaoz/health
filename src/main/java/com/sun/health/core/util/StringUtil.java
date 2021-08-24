@@ -1,5 +1,7 @@
 package com.sun.health.core.util;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +24,19 @@ public final class StringUtil {
         Pattern p = Pattern.compile("[\u4e00-\u9fa5]");
         Matcher m = p.matcher(src);
         return m.find();
+    }
+
+    public static boolean contain(String content, List<String> items) {
+        if (Objects.isNull(content) || content.isEmpty()) {
+            return false;
+        }
+
+        for (String item : items) {
+            if (content.contains(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

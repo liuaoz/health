@@ -23,7 +23,8 @@ import java.util.*;
 @Service
 public class BloodService extends AbstractService {
 
-    private static final String PARENT_DIR = "/Users/stonechen/father/";
+    //    private static final String PARENT_DIR = "/Users/stonechen/father/";
+    private static final String PARENT_DIR = "D:\\report\\";
 
     @Autowired
     private BloodRepository bloodRepository;
@@ -33,12 +34,31 @@ public class BloodService extends AbstractService {
 
     private static List<String> titles = new ArrayList<>();
     private static Map<String, String> statusFlag = new HashMap<>();
+    private static List<String> keywords = new ArrayList<>();
 
     static {
         titles.add("结果");
         titles.add("参考范围");
 
         statusFlag.put("↑", "high");
+
+        // unit
+        keywords.add("秒");
+        keywords.add("阴性");
+        keywords.add("阳性");
+        keywords.add("正常");
+        keywords.add("镜检报告");
+        keywords.add("未找到");
+        keywords.add("仪器结果受干扰");
+        keywords.add("以镜检结果为准");
+        keywords.add("干化学报告");
+        keywords.add("黄");
+        keywords.add("清");
+        keywords.add("+");
+        keywords.add("++");
+        keywords.add("+++");
+        keywords.add("++++");
+        keywords.add("+++++");
     }
 
     public boolean delete(String date) {
@@ -57,7 +77,7 @@ public class BloodService extends AbstractService {
      * @param date 检查日期, 格式为：yyyyMMdd
      */
     public void handle(String date) {
-        String parentDir = PARENT_DIR + date + "/";
+        String parentDir = PARENT_DIR + date;
         File file = new File(parentDir);
         File[] files = file.listFiles();
 
@@ -81,8 +101,7 @@ public class BloodService extends AbstractService {
     }
 
     /**
-     * @param imageUrl xx/x/xx/date/fileName
-     * @return item list
+     * parse report image
      */
     public List<BloodReportEntity> parse(Date measurementTime, byte[] content) {
 
@@ -108,7 +127,7 @@ public class BloodService extends AbstractService {
                     continue;
                 }
 
-                if (StringUtil.isContainChinese(detectedText) && !detectedText.contains("秒")) {
+                if (StringUtil.isContainChinese(detectedText) && !StringUtil.contain(detectedText, keywords)) {
                     itemIndex.add(i);
                 }
             }
@@ -122,7 +141,7 @@ public class BloodService extends AbstractService {
                 StringBuilder sb = new StringBuilder();
 
                 int i = index + 2;
-                while (i < textDetections.length && (!StringUtil.isContainChinese(textDetections[i].getDetectedText())) || textDetections[i].getDetectedText().contains("秒")) {
+                while (i < textDetections.length && (!StringUtil.isContainChinese(textDetections[i].getDetectedText()) || StringUtil.contain(textDetections[i].getDetectedText(), keywords))) {
                     sb.append(textDetections[i].getDetectedText());
                     i++;
                 }
@@ -130,6 +149,8 @@ public class BloodService extends AbstractService {
                 reportEntities.add(bloodReportEntity);
             });
             save(reportEntities);
+        } else {
+            logger.warn("Tencent basic ocr response is invalid.");
         }
         return reportEntities;
     }
