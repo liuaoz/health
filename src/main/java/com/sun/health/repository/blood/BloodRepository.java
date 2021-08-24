@@ -17,5 +17,5 @@ public interface BloodRepository extends JpaRepository<BloodReportEntity, Long> 
 
     List<BloodReportEntity> findByItemAndMeasurementTime(String item, Date measurementTime);
 
-    int deleteByMeasurementTime(Date measurementTime);
+    int deleteByReportDate(String reportDate);
 }

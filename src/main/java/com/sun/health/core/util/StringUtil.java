@@ -1,5 +1,7 @@
 package com.sun.health.core.util;
 
+import com.sun.health.core.comm.DataHolder;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -37,6 +39,19 @@ public final class StringUtil {
             }
         }
         return false;
+    }
+
+    public static DataHolder<Boolean, String> getContainItem(String content, List<String> items) {
+        if (Objects.isNull(content) || content.isEmpty()) {
+            return new DataHolder<>(false, null);
+        }
+
+        for (String item : items) {
+            if (content.contains(item)) {
+                return new DataHolder<>(true, item);
+            }
+        }
+        return new DataHolder<>(false, null);
     }
 
 }

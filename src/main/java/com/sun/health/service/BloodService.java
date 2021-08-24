@@ -1,5 +1,6 @@
 package com.sun.health.service;
 
+import com.sun.health.core.comm.DataHolder;
 import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.FileUtil;
 import com.sun.health.core.util.StringUtil;
@@ -10,6 +11,7 @@ import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.tencentcloudapi.ocr.v20181119.models.TextDetection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.*;
@@ -39,7 +41,10 @@ public class BloodService extends AbstractService {
         titles.add("结果");
         titles.add("参考范围");
 
-        statusFlag.put("↑", "high");
+        statusFlag.put("↑", "偏高");
+        statusFlag.put("↓", "偏低");
+        statusFlag.put("阳性", "异常");
+        statusFlag.put("阳", "异常");
 
         // unit
         keywords.add("秒");
@@ -60,8 +65,8 @@ public class BloodService extends AbstractService {
         keywords.add("+++++");
     }
 
-    public boolean delete(String date) {
-        bloodRepository.deleteByMeasurementTime(DateUtil.fromYyyyMMdd(date));
+    public boolean delete(String reportDate) {
+        bloodRepository.deleteByReportDate(reportDate);
         return true;
     }
 
@@ -70,41 +75,53 @@ public class BloodService extends AbstractService {
         return !entities.isEmpty();
     }
 
+    public void startHandle() {
+        String reportFile = "D:\\report";
+        File file = new File(reportFile);
+        File[] files = file.listFiles();
+
+        if (Objects.isNull(files)) {
+            return;
+        }
+        Arrays.stream(files).forEach(t -> handle(t.getName()));
+    }
+
     /**
      * 批量处理某一次检查报告，可能包含多张检查报告单
      *
-     * @param date 检查日期, 格式为：yyyyMMdd
+     * @param reportDate 检查日期, 格式为：yyyyMMdd
      */
-    public void handle(String date) {
-        String parentDir = PARENT_DIR + date;
+    @Transactional
+    public void handle(String reportDate) {
+        String parentDir = PARENT_DIR + reportDate;
         File file = new File(parentDir);
         File[] files = file.listFiles();
 
         List<String> failed = new ArrayList<>();
 
         if (files == null) {
-            logger.warn("{} 没有检测报告单", date);
+            logger.warn("{} 没有检测报告单", reportDate);
             return;
         }
         //1.清理当天所以报告单
-        delete(date);
+        delete(reportDate);
 
         Arrays.stream(files).forEach(k -> {
             try {
-                parse(DateUtil.fromYyyyMMdd(date), FileUtil.toByteArrayByNio(k));
+                parse(reportDate, DateUtil.fromYyyyMMdd(reportDate), FileUtil.toByteArrayByNio(k));
             } catch (Exception e) {
                 failed.add(k.getName());
                 logger.error("parse file error.file=" + k.getName(), e);
             }
 //            list.forEach(t -> System.out.println(String.format("%-40s", t.getItem().trim()) + String.format("%-40s", t.getResult().trim()) + String.format("%-40s", t.getReference().trim())));
         });
-        logger.info("{} 报告处理结果：[报告单总数：{}，失败的报告单：{}]", date, files.length, failed.toArray());
+        logger.info("{} 报告处理结果：[报告单总数：{}，失败的报告单：{}]", reportDate, files.length, failed.toArray());
     }
 
     /**
      * parse report image
      */
-    public void parse(Date measurementTime, byte[] content) {
+    public void parse(String reportDate, Date measurementTime, byte[] content) {
 
 
         List<BloodReportEntity> reportEntities = new ArrayList<>();
@@ -140,6 +157,11 @@ public class BloodService extends AbstractService {
                 bloodReportEntity.setItem(textDetections[index].getDetectedText());
                 bloodReportEntity.setResult(textDetections[index + 1].getDetectedText());
                 bloodReportEntity.setMeasurementTime(measurementTime);
+                bloodReportEntity.setReportDate(reportDate);
+                DataHolder<Boolean, String> holder = StringUtil.getContainItem(bloodReportEntity.getResult(), new ArrayList<>(statusFlag.keySet()));
+                if (holder.getHasData()) {
+                    bloodReportEntity.setStatus(statusFlag.get(holder.getData()));
+                }
                 StringBuilder sb = new StringBuilder();
 
                 int i = index + 2;

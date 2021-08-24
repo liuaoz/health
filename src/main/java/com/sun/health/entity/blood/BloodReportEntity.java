@@ -26,6 +26,11 @@ public class BloodReportEntity extends BaseEntity {
     private Date measurementTime;
 
     /**
+     * 检测日期
+     */
+    private String reportDate;
+
+    /**
      * 指标名称
      */
     private String item;
@@ -65,6 +70,13 @@ public class BloodReportEntity extends BaseEntity {
      */
     private String category;
 
+    public String getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(String reportDate) {
+        this.reportDate = reportDate;
+    }
 
     public String getItem() {
         return item;

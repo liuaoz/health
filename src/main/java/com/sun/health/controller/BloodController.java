@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+
 /**
  * @author Matrix
  * @version v1.0.0
@@ -24,6 +26,13 @@ public class BloodController extends BaseController {
     @GetMapping("/tencent")
     public ResponseEntity<String> blood(@RequestParam String date) {
         bloodService.handle(date);
+        return ResponseEntity.ok("success");
+    }
+
+    @GetMapping("/start")
+    public ResponseEntity<String> blood() {
+
+        bloodService.startHandle();
         return ResponseEntity.ok("success");
     }
 }
