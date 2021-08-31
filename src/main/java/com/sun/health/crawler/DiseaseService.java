@@ -20,10 +20,10 @@ import java.util.List;
 public class DiseaseService extends AbstractService {
 
     public static final String userAgent =
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36";
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36";
 
     public static final String cookie =
-            "Hm_lvt_9e22985df06deed62100d2beef9fb177=1630330763; Hm_lvt_2739afef62965c18b48103229be36bf6=1630330763; Hm_lpvt_2739afef62965c18b48103229be36bf6=1630332475; Hm_lpvt_9e22985df06deed62100d2beef9fb177=1630332475";
+            "Hm_lvt_9e22985df06deed62100d2beef9fb177=1630372634; Hm_lpvt_9e22985df06deed62100d2beef9fb177=1630372634; Hm_lvt_2739afef62965c18b48103229be36bf6=1630372634; Hm_lpvt_2739afef62965c18b48103229be36bf6=1630372634";
 
     @Autowired
     private DaiFuRepository daiFuRepository;
@@ -34,18 +34,25 @@ public class DiseaseService extends AbstractService {
 
     public void parseDiseases() {
         List<DaiFuEntity> daiFuEntities = daiFuRepository.findAll();
+        List<String> failedUrl = new ArrayList<>();
 
         daiFuEntities.forEach(daiFuEntity -> {
-            parseEachDisease(daiFuEntity.getUrl(), daiFuEntity.getName());
+            boolean success = parseEachDisease(daiFuEntity.getUrl(), daiFuEntity.getName());
+            if (!success) {
+                failedUrl.add(daiFuEntity.getUrl());
+            } else {
+                logger.info("get data success. diseaseName={}", daiFuEntity.getName());
+            }
         });
     }
 
 
-    private void parseEachDisease(String url, String diseaseName) {
+    private boolean parseEachDisease(String url, String diseaseName) {
 
         try {
             Connection.Response response = Jsoup.connect(url)
                     .userAgent(userAgent)
+                    .timeout(5000)
                     .cookie("Cookie", cookie)
                     .execute();
 
@@ -104,9 +111,11 @@ public class DiseaseService extends AbstractService {
 
             diseaseRepository.save(diseaseEntity);
 
+            return true;
 
-        } catch (IOException e) {
-            logger.error("parse url error. url=" + url, e);
+        } catch (Exception e) {
+            logger.error("get disease basic info error. url=" + url, e);
+            return false;
         }
     }
 
@@ -115,6 +124,7 @@ public class DiseaseService extends AbstractService {
         try {
             Connection.Response response = Jsoup.connect(targetUrl)
                     .userAgent(userAgent)
+                    .timeout(5000)
                     .cookie("Cookie", cookie)
                     .execute();
             Document document = response.parse();
@@ -123,7 +133,7 @@ public class DiseaseService extends AbstractService {
 
             return elements.first().text();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error("getDiseaseItem error, url=" + targetUrl, e);
         }
         return null;
@@ -135,7 +145,6 @@ public class DiseaseService extends AbstractService {
     public void crawlDiseaseList() {
 
         String url = "https://disease.51daifu.com/char";
-//        String url = "https://www.baidu.com";
 
         try {
             Connection.Response response = Jsoup.connect(url)
@@ -146,8 +155,6 @@ public class DiseaseService extends AbstractService {
             Document document = response.parse();
 
             Elements listEles = document.select("li[class=fl cont_item c333 fs0d9r pt0d4r mb0d4r]");
-
-//            Elements listEles = document.getElementsByClass("fl cont_item c333 fs0d9r pt0d4r mb0d4r");
 
             logger.info("list={}", listEles);
             List<DaiFuEntity> list = new ArrayList<>();
