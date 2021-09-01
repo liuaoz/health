@@ -1,4 +1,4 @@
-package com.sun.health.crawler;
+package com.sun.health.service.crawler;
 
 import com.sun.health.entity.crawler.DaiFuEntity;
 import com.sun.health.entity.disease.DiseaseEntity;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DiseaseService extends AbstractService {
@@ -31,12 +32,16 @@ public class DiseaseService extends AbstractService {
     @Autowired
     private DiseaseRepository diseaseRepository;
 
-
     public void parseDiseases() {
         List<DaiFuEntity> daiFuEntities = daiFuRepository.findAll();
+        List<DiseaseEntity> existsDiseases = diseaseRepository.findAll();
+        List<String> existsDiseaseNames = existsDiseases.stream().map(DiseaseEntity::getName).collect(Collectors.toList());
+
+        List<DaiFuEntity> toParse = daiFuEntities.stream().filter(t -> !existsDiseaseNames.contains(t.getName())).collect(Collectors.toList());
+
         List<String> failedUrl = new ArrayList<>();
 
-        daiFuEntities.forEach(daiFuEntity -> {
+        toParse.forEach(daiFuEntity -> {
             boolean success = parseEachDisease(daiFuEntity.getUrl(), daiFuEntity.getName());
             if (!success) {
                 failedUrl.add(daiFuEntity.getUrl());
@@ -114,10 +119,10 @@ public class DiseaseService extends AbstractService {
             return true;
 
         } catch (IOException e) {
-            logger.error("get disease basic info error. url=" + url + ", ", e.getMessage());
+            logger.error("get disease basic info io error. url=" + url, e);
             parseEachDisease(url, diseaseName);
         } catch (Exception e) {
-            logger.error("get disease basic info error, url=" + url + ", " + e.getMessage());
+            logger.error("get disease basic info unknown error, url=" + url, e);
         }
         return false;
     }

@@ -1,6 +1,6 @@
 package com.sun.health.controller;
 
-import com.sun.health.crawler.DiseaseService;
+import com.sun.health.service.crawler.DiseaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
