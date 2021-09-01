@@ -1,8 +1,8 @@
-package com.sun.health.service.body;
+package com.sun.health.service.people;
 
-import com.sun.health.entity.body.BodyPartEntity;
+import com.sun.health.entity.people.BodyPartEntity;
 import com.sun.health.entity.disease.DiseaseEntity;
-import com.sun.health.repository.body.BodyPartRepository;
+import com.sun.health.repository.people.BodyPartRepository;
 import com.sun.health.repository.disease.DiseaseRepository;
 import com.sun.health.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class BodyPartService extends AbstractService {
         });
 
         List<BodyPartEntity> entities = new ArrayList<>();
-        parts.forEach(t -> {
+        parts.stream().filter(t -> !t.isEmpty()).forEach(t -> {
             BodyPartEntity entity = new BodyPartEntity();
             entity.setName(t);
             entities.add(entity);

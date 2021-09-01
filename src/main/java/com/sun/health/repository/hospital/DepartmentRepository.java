@@ -1,6 +1,6 @@
-package com.sun.health.repository.body;
+package com.sun.health.repository.hospital;
 
-import com.sun.health.entity.body.BodyPartEntity;
+import com.sun.health.entity.hospital.DepartmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @since : 2021/9/1
  **/
 @Repository
-public interface BodyPartRepository extends JpaRepository<BodyPartEntity, Long> {
+public interface DepartmentRepository extends JpaRepository<DepartmentEntity, Long> {
 }
