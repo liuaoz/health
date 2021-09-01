@@ -113,10 +113,13 @@ public class DiseaseService extends AbstractService {
 
             return true;
 
+        } catch (IOException e) {
+            logger.error("get disease basic info error. url=" + url + ", ", e.getMessage());
+            parseEachDisease(url, diseaseName);
         } catch (Exception e) {
-            logger.error("get disease basic info error. url=" + url, e);
-            return false;
+            logger.error("get disease basic info error, url=" + url + ", " + e.getMessage());
         }
+        return false;
     }
 
     private String getDiseaseItem(String targetUrl) {
@@ -133,8 +136,11 @@ public class DiseaseService extends AbstractService {
 
             return elements.first().text();
 
+        } catch (IOException e) {
+            logger.error("getDiseaseItem error, url=" + targetUrl + ", " + e.getMessage());
+            getDiseaseItem(targetUrl);
         } catch (Exception e) {
-            logger.error("getDiseaseItem error, url=" + targetUrl, e);
+            logger.error("get disease item error, url=" + targetUrl + ", " + e.getMessage());
         }
         return null;
     }
