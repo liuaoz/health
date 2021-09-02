@@ -1,9 +1,9 @@
-package com.sun.health.service.people;
+package com.sun.health.service.human;
 
 import com.sun.health.entity.disease.DiseaseEntity;
-import com.sun.health.entity.people.PeopleGroupEntity;
+import com.sun.health.entity.human.PeopleGroupEntity;
 import com.sun.health.repository.disease.DiseaseRepository;
-import com.sun.health.repository.people.PeopleGroupRepository;
+import com.sun.health.repository.human.PeopleGroupRepository;
 import com.sun.health.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

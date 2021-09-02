@@ -1,6 +1,6 @@
-package com.sun.health.repository.people;
+package com.sun.health.repository.human;
 
-import com.sun.health.entity.people.BodyPartEntity;
+import com.sun.health.entity.human.BodyPartEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

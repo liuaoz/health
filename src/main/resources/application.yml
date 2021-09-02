@@ -12,6 +12,13 @@ spring:
   mvc:
     servlet:
       path: /health
+  data:
+    redis:
+      repositories:
+        enabled: false
+    elasticsearch:
+      repositories:
+        enabled: false
 
 cloud:
   tencent:

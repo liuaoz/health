@@ -1,4 +1,4 @@
-package com.sun.health.entity.people;
+package com.sun.health.entity.human;
 
 import com.sun.health.entity.BaseEntity;
 

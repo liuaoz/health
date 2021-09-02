@@ -1,8 +1,8 @@
-package com.sun.health.service.people;
+package com.sun.health.service.human;
 
-import com.sun.health.entity.people.BodyPartEntity;
+import com.sun.health.entity.human.BodyPartEntity;
 import com.sun.health.entity.disease.DiseaseEntity;
-import com.sun.health.repository.people.BodyPartRepository;
+import com.sun.health.repository.human.BodyPartRepository;
 import com.sun.health.repository.disease.DiseaseRepository;
 import com.sun.health.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
