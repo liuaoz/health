@@ -16,6 +16,8 @@ public class DaiFuEntity extends BaseEntity {
 
     private String url;
 
+    private boolean status;
+
     public String getName() {
         return name;
     }
@@ -30,5 +32,13 @@ public class DaiFuEntity extends BaseEntity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
