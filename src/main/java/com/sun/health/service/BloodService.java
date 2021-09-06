@@ -182,4 +182,8 @@ public class BloodService extends AbstractService {
         bloodRepository.saveAll(list);
     }
 
+    public List<BloodReportEntity> findByItem(String item) {
+        return bloodRepository.findByItem(item);
+    }
+
 }
