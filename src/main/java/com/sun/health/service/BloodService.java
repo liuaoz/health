@@ -186,4 +186,8 @@ public class BloodService extends AbstractService {
         return bloodRepository.findByItem(item);
     }
 
+    public List<BloodReportEntity> findByReportDate(String reportDate) {
+        return bloodRepository.findByReportDate(reportDate);
+    }
+
 }

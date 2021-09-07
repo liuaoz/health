@@ -1,5 +1,6 @@
 package com.sun.health.service.indicator;
 
+import com.sun.health.dto.indicator.IndicatorRespDTO;
 import com.sun.health.entity.blood.BloodReportEntity;
 import com.sun.health.service.BloodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,20 @@ public class IndicatorService {
     @Autowired
     private BloodService bloodService;
 
-    public List<Object> getTrendByIndicator(String indicator) {
+    public List<IndicatorRespDTO> getTrendByIndicator(String indicator) {
 
         List<BloodReportEntity> entities = bloodService.findByItem(indicator);
 
-        return entities.stream().map(BloodReportEntity::getResult).collect(Collectors.toList());
+        return entities.stream().map(t -> {
+            IndicatorRespDTO dto = new IndicatorRespDTO();
+            dto.setIndicator(indicator);
+            dto.setValue(t.getResult());
+            dto.setReportDate(t.getReportDate());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    public List<BloodReportEntity> getReportByReportDate(String reportDate) {
+        return bloodService.findByReportDate(reportDate);
     }
 }

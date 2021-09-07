@@ -2,13 +2,13 @@ package com.sun.health.dto.indicator;
 
 import com.sun.health.dto.BaseDTO;
 
-import java.util.List;
+public class IndicatorRespDTO extends BaseDTO {
 
-public class IndicatorRespDTO<T> extends BaseDTO {
+    private String indicator;
 
-    private  String indicator;
+    private String value;
 
-    private List<T> list;
+    private String reportDate;
 
     public String getIndicator() {
         return indicator;
@@ -18,11 +18,19 @@ public class IndicatorRespDTO<T> extends BaseDTO {
         this.indicator = indicator;
     }
 
-    public List<T> getList() {
-        return list;
+    public String getValue() {
+        return value;
     }
 
-    public void setList(List<T> list) {
-        this.list = list;
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(String reportDate) {
+        this.reportDate = reportDate;
     }
 }

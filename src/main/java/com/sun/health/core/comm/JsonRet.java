@@ -3,13 +3,18 @@ package com.sun.health.core.comm;
 import java.io.Serializable;
 
 /**
+ * 框架统一响应结构
+ *
  * @author Matrix
  * @version v1.0.0
  * @since : 2021/8/30
  **/
 public class JsonRet<T> implements Serializable {
 
-    private String code;
+    /**
+     * @see com.sun.health.core.comm.CodeEnum
+     */
+    private int code;
 
     private String msg;
 
@@ -18,22 +23,37 @@ public class JsonRet<T> implements Serializable {
     public JsonRet() {
     }
 
-    public JsonRet(String code, T data) {
-        this.code = code;
-        this.data = data;
-    }
-
-    public JsonRet(String code, String msg, T data) {
+    public JsonRet(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public String getCode() {
+    public static <E> JsonRet<E> success() {
+        return new JsonRet<>(CodeEnum.SUCCESS.getCode(), CodeEnum.SUCCESS.getMsg(), null);
+    }
+
+    public static <E> JsonRet<E> success(E data) {
+        return new JsonRet<>(CodeEnum.SUCCESS.getCode(), CodeEnum.SUCCESS.getMsg(), data);
+    }
+
+    public static JsonRet<String> fail() {
+        return new JsonRet<>(CodeEnum.FAILED.getCode(), CodeEnum.FAILED.getMsg(), null);
+    }
+
+    public static JsonRet<String> fail(String msg) {
+        return new JsonRet<>(CodeEnum.FAILED.getCode(), msg, null);
+    }
+
+    public static <E> JsonRet<E> ret(CodeEnum codeEnum, E data) {
+        return new JsonRet<>(codeEnum.getCode(), codeEnum.getMsg(), data);
+    }
+
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

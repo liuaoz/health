@@ -20,4 +20,6 @@ public interface BloodRepository extends JpaRepository<BloodReportEntity, Long> 
     int deleteByReportDate(String reportDate);
 
     List<BloodReportEntity> findByItem(String item);
+
+    List<BloodReportEntity> findByReportDate(String reportDate);
 }
