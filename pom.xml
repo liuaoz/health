@@ -14,7 +14,7 @@
     <name>health</name>
     <description>health project from sun</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
