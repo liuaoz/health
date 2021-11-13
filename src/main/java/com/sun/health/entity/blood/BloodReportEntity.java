@@ -21,6 +21,11 @@ public class BloodReportEntity extends BaseEntity {
     private String patient;
 
     /**
+     * 采集时间
+     */
+    private String acquisitionTime;
+
+    /**
      * 检测时间
      */
     private Date measurementTime;
@@ -46,6 +51,16 @@ public class BloodReportEntity extends BaseEntity {
     private String reference;
 
     /**
+     * 单位
+     */
+    private String unit;
+
+    /**
+     * 检测方法
+     */
+    private String inspectionMethod;
+
+    /**
      * 正常(normal)，偏高(high)，偏低(low)，异常(abnormal)...
      */
     private String status;
@@ -69,6 +84,30 @@ public class BloodReportEntity extends BaseEntity {
      * 科别
      */
     private String category;
+
+    public String getAcquisitionTime() {
+        return acquisitionTime;
+    }
+
+    public void setAcquisitionTime(String acquisitionTime) {
+        this.acquisitionTime = acquisitionTime;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public String getInspectionMethod() {
+        return inspectionMethod;
+    }
+
+    public void setInspectionMethod(String inspectionMethod) {
+        this.inspectionMethod = inspectionMethod;
+    }
 
     public String getReportDate() {
         return reportDate;

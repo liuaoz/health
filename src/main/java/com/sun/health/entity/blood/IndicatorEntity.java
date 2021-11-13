@@ -18,6 +18,8 @@ public class IndicatorEntity extends BaseEntity {
     @Column(unique = true)
     private String item;
 
+    private String abbr;
+
     private String reference;
 
     public String getItem() {
@@ -26,6 +28,14 @@ public class IndicatorEntity extends BaseEntity {
 
     public void setItem(String item) {
         this.item = item;
+    }
+
+    public String getAbbr() {
+        return abbr;
+    }
+
+    public void setAbbr(String abbr) {
+        this.abbr = abbr;
     }
 
     public String getReference() {

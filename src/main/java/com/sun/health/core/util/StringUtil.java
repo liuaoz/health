@@ -1,6 +1,7 @@
 package com.sun.health.core.util;
 
 import com.sun.health.core.comm.DataHolder;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +16,10 @@ import java.util.regex.Pattern;
  * @since : 2021/8/22
  **/
 public final class StringUtil {
+
+    public static boolean isEmpty(String str) {
+        return str == null || str.isEmpty() || str.isBlank();
+    }
 
     /**
      * contain chinese
