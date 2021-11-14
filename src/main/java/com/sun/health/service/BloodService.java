@@ -81,11 +81,6 @@ public class BloodService extends AbstractService {
         return true;
     }
 
-    public boolean exist(String item, String date) {
-        List<BloodReportEntity> entities = bloodRepository.findByItemAndMeasurementTime(item, DateUtil.fromYyyyMMdd(date));
-        return !entities.isEmpty();
-    }
-
     public void startHandle() {
         String reportFile = "D:\\report";
         File file = new File(reportFile);
@@ -167,7 +162,6 @@ public class BloodService extends AbstractService {
                 BloodReportEntity bloodReportEntity = new BloodReportEntity();
                 bloodReportEntity.setItem(textDetections[index].getDetectedText());
                 bloodReportEntity.setResult(textDetections[index + 1].getDetectedText());
-                bloodReportEntity.setMeasurementTime(measurementTime);
                 bloodReportEntity.setReportDate(reportDate);
                 DataHolder<Boolean, String> holder = StringUtil.getContainItem(bloodReportEntity.getResult(), new ArrayList<>(statusFlag.keySet()));
                 if (holder.getHasData()) {

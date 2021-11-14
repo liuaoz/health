@@ -43,4 +43,8 @@ public enum ZhangZhouReportBasicItem {
         }
         return Arrays.stream(values()).anyMatch(t -> t.name.contains(name) || name.contains(t.name));
     }
+
+    public String getName() {
+        return name;
+    }
 }

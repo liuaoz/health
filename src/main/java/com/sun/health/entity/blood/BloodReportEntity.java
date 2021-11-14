@@ -26,9 +26,14 @@ public class BloodReportEntity extends BaseEntity {
     private String acquisitionTime;
 
     /**
-     * 检测时间
+     * 检验目的
      */
-    private Date measurementTime;
+    private String inspectionPurpose;
+
+    /**
+     * 标本种类
+     */
+    private String specimenType;
 
     /**
      * 检测日期
@@ -141,14 +146,6 @@ public class BloodReportEntity extends BaseEntity {
         this.reference = reference;
     }
 
-    public Date getMeasurementTime() {
-        return measurementTime;
-    }
-
-    public void setMeasurementTime(Date measurementTime) {
-        this.measurementTime = measurementTime;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -195,5 +192,21 @@ public class BloodReportEntity extends BaseEntity {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getInspectionPurpose() {
+        return inspectionPurpose;
+    }
+
+    public void setInspectionPurpose(String inspectionPurpose) {
+        this.inspectionPurpose = inspectionPurpose;
+    }
+
+    public String getSpecimenType() {
+        return specimenType;
+    }
+
+    public void setSpecimenType(String specimenType) {
+        this.specimenType = specimenType;
     }
 }
