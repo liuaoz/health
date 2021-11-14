@@ -15,4 +15,9 @@ public final class JsonUtil {
         Gson gson = new Gson();
         return gson.fromJson(src, cls);
     }
+
+    public static String toJson(Object obj){
+        Gson gson = new Gson();
+        return gson.toJson(obj);
+    }
 }
