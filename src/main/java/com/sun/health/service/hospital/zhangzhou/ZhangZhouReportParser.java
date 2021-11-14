@@ -137,21 +137,30 @@ public class ZhangZhouReportParser extends AbstractService {
 
             entity.setItem(item);
 
+
             for (Text text : texts) {
+                boolean match = false;
                 if (NumberUtil.isSimilar(text.getX(), finalResultPolygon.getX(), COMMON_DELTA)) {
                     entity.setResult(text.getValue());
+                    match = true;
                 }
 
                 if (NumberUtil.isSimilar(text.getX(), finalReferencePolygon.getX(), 40)) {
                     entity.setReference(text.getValue());
+                    match = true;
                 }
 
                 if (NumberUtil.isSimilar(text.getX(), finalUnitPolygon.getX(), COMMON_DELTA)) {
                     entity.setUnit(text.getValue());
+                    match = true;
                 }
 
                 if (NumberUtil.isSimilar(text.getX(), finalInspectionMethodPolygon.getX(), COMMON_DELTA)) {
                     entity.setInspectionMethod(text.getValue());
+                    match = true;
+                }
+                if (!match) {
+                    logger.warn("项目:{},没有正常处理的识别文本：{}", item, text);
                 }
             }
             return entity;
