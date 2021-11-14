@@ -2,6 +2,7 @@ package com.sun.health.controller.blood;
 
 
 import com.sun.health.controller.BaseController;
+import com.sun.health.core.comm.JsonRet;
 import com.sun.health.service.BloodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,14 @@ public class BloodController extends BaseController {
 
     @Autowired
     private BloodService bloodService;
+
+    @GetMapping("/zhangzhou")
+    public JsonRet<Boolean> handleZhangZhouReport() {
+        new Thread(() -> {
+            bloodService.handleZhangZhouReport();
+        }).start();
+        return JsonRet.success();
+    }
 
     @GetMapping("/tencent")
     public ResponseEntity<String> blood(@RequestParam String date) {

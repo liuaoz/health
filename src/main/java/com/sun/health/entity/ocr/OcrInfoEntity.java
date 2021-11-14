@@ -2,6 +2,7 @@ package com.sun.health.entity.ocr;
 
 import com.sun.health.entity.BaseEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -11,11 +12,15 @@ public class OcrInfoEntity extends BaseEntity {
 
     private String fileName;
 
+    @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] content;
 
-    private String textDetections;
+    private String supplier;
 
-    private boolean translated;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String jsonResponse;
+
+    private String status;
 
     public String getFileName() {
         return fileName;
@@ -33,19 +38,27 @@ public class OcrInfoEntity extends BaseEntity {
         this.content = content;
     }
 
-    public String getTextDetections() {
-        return textDetections;
+    public String getSupplier() {
+        return supplier;
     }
 
-    public void setTextDetections(String textDetections) {
-        this.textDetections = textDetections;
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 
-    public boolean isTranslated() {
-        return translated;
+    public String getJsonResponse() {
+        return jsonResponse;
     }
 
-    public void setTranslated(boolean translated) {
-        this.translated = translated;
+    public void setJsonResponse(String jsonResponse) {
+        this.jsonResponse = jsonResponse;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -28,18 +28,18 @@ public class ParserController extends BaseController {
 
     @GetMapping("/zhangzhou/{fileName}")
     public JsonRet<?> parseZhangZhouReport(@PathVariable String fileName) {
-        String imageUrl = Const.imagePath + fileName;
-        //1. 调用第三方ocr接口识别，返回json
-        GeneralBasicOCRResponse response;
-        try {
-            response = tencentService.basicOcr(FileUtil.toByteArrayByNio(new File(imageUrl)));
-        } catch (IOException e) {
-            logger.error("call tencent ocr api error.", e);
-            return JsonRet.fail();
-        }
+//        String imageUrl = Const.imagePath + fileName;
+//        //1. 调用第三方ocr接口识别，返回json
+//        GeneralBasicOCRResponse response;
+//        try {
+//            response = tencentService.basicOcr(FileUtil.toByteArrayByNio(new File(imageUrl)));
+//        } catch (IOException e) {
+//            logger.error("call tencent ocr api error.", e);
+//            return JsonRet.fail();
+//        }
         //2. 解析json，存储到db之中
-        String content = null;
-        zhangZhouReportParser.parse(JsonUtil.toJson(response));
+//        zhangZhouReportParser.parse(JsonUtil.toJson(response));
+        zhangZhouReportParser.parse(Const.content);
         return JsonRet.success();
     }
 }

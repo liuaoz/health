@@ -1,11 +1,14 @@
 package com.sun.health.service;
 
+import com.sun.health.comm.Const;
 import com.sun.health.core.comm.DataHolder;
 import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.FileUtil;
+import com.sun.health.core.util.JsonUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.entity.blood.BloodReportEntity;
 import com.sun.health.repository.blood.BloodRepository;
+import com.sun.health.service.hospital.zhangzhou.ZhangZhouReportParser;
 import com.sun.health.service.tencent.TencentService;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.tencentcloudapi.ocr.v20181119.models.TextDetection;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,6 +36,9 @@ public class BloodService extends AbstractService {
 
     @Autowired
     private TencentService tencentService;
+
+    @Autowired
+    private ZhangZhouReportParser zhangZhouReportParser;
 
     private static List<String> titles = new ArrayList<>();
     private static Map<String, String> statusFlag = new HashMap<>();
@@ -65,15 +72,35 @@ public class BloodService extends AbstractService {
         keywords.add("+++++");
     }
 
-    public static void main(String[] args) {
-       parseZhangZhouHospital();
-    }
+    /**
+     * 批量处理报告文件。调用第三方ocr接口并解析入库
+     */
+    public void handleZhangZhouReport() {
 
-    public static void parseZhangZhouHospital(){
+        //1. 获取本地报告文件
+        String parentPath = Const.imagePath;
+        File parent = new File(parentPath);
+        File[] files = parent.listFiles();
 
+        if (Objects.isNull(files)) {
+            logger.warn("{}目录下未找到报告文件.", parentPath);
+            return;
+        }
 
-
-
+        //2. 调用第三方ocr
+        for (File file : files) {
+            GeneralBasicOCRResponse response;
+            try {
+                logger.info("开始:{}....", file.getName());
+                response = tencentService.basicOcr(FileUtil.toByteArrayByNio(file));
+            } catch (IOException e) {
+                logger.error("call tencent ocr api error. handle fileName:" + file.getName(), e);
+                continue;
+            }
+            //3. 解析入库
+            zhangZhouReportParser.parse(JsonUtil.toJson(response));
+            logger.info("完成:{}", file.getName());
+        }
     }
 
     public boolean delete(String reportDate) {
@@ -128,7 +155,6 @@ public class BloodService extends AbstractService {
      * parse report image
      */
     public void parse(String reportDate, Date measurementTime, byte[] content) {
-
 
         List<BloodReportEntity> reportEntities = new ArrayList<>();
 
