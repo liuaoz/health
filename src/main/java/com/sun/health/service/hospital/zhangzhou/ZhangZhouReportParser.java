@@ -31,7 +31,7 @@ public class ZhangZhouReportParser extends AbstractService {
         System.out.println(value);
     }
 
-    public void parse(String content) {
+    public void parse(String fileName, String content) {
         //1. 检测方法之后，进入检测项目
         //2. 构造一个map对象，项目名称作为key；value为一个数组，存放该项目的检测结果、参考值等
         //3. 记录项目、结果、参考值、单位、检测方法的x坐标
@@ -112,7 +112,7 @@ public class ZhangZhouReportParser extends AbstractService {
             }
         }
         if (Objects.isNull(resultPolygon) || Objects.isNull(referencePolygon) || Objects.isNull(unitPolygon) || Objects.isNull(inspectionMethodPolygon)) {
-            logger.warn("解析的结果中，项目标题不完整！！！");
+            logger.warn("{}解析的结果中，项目标题不完整！！！", fileName);
             return;
         }
 //        logger.info("结果-x:" + resultPolygon.getX());
@@ -161,12 +161,12 @@ public class ZhangZhouReportParser extends AbstractService {
                     match = true;
                 }
 
-                if (NumberUtil.isSimilar(text.getX(), finalInspectionMethodPolygon.getX(), COMMON_DELTA)) {
+                if (NumberUtil.isSimilar(text.getX(), finalInspectionMethodPolygon.getX(), 50)) {
                     entity.setInspectionMethod(text.getValue());
                     match = true;
                 }
                 if (!match) {
-                    logger.warn("项目:{},没有正常处理的识别文本：{}", item, text.getValue());
+                    logger.warn("文件:{},项目:{},没有正常处理的识别文本：{}", fileName, item, text.getValue());
                 }
             }
             return entity;

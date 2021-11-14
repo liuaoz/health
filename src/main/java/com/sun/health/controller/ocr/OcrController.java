@@ -1,7 +1,7 @@
 package com.sun.health.controller.ocr;
 
 import com.sun.health.core.comm.JsonRet;
-import com.sun.health.service.ocr.OcrService;
+import com.sun.health.service.ocr.OcrInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OcrController {
 
     @Autowired
-    private OcrService ocrService;
+    private OcrInfoService ocrService;
 
     @GetMapping("/loadFileAndOcr")
     public JsonRet<Boolean> loadFileAndOcr() {

@@ -27,9 +27,7 @@ public class BloodController extends BaseController {
 
     @GetMapping("/zhangzhou")
     public JsonRet<Boolean> handleZhangZhouReport() {
-        new Thread(() -> {
-            bloodService.handleZhangZhouReport();
-        }).start();
+        new Thread(() -> bloodService.handleZhangZhouReport()).start();
         return JsonRet.success();
     }
 

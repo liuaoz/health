@@ -15,16 +15,30 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @Service
-public class OcrService extends AbstractService {
+public class OcrInfoService extends AbstractService {
 
     @Autowired
     private OcrInfoRepository ocrInfoRepository;
 
     @Autowired
     private TencentService tencentService;
+
+    public OcrInfoEntity getById(Long id) {
+        return ocrInfoRepository.findById(id).orElse(null);
+    }
+
+    public List<Long> getAllIds() {
+        return ocrInfoRepository.findAllIds();
+    }
+
+    public OcrInfoEntity get(String fileName) {
+        List<OcrInfoEntity> entities = ocrInfoRepository.findByFileName(fileName);
+        return entities.isEmpty() ? null : entities.get(0);
+    }
 
     /**
      * 加载报告图片并调用第三方ocr接口，将返回结果存储到数据库中

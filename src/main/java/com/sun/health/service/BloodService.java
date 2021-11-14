@@ -1,14 +1,14 @@
 package com.sun.health.service;
 
-import com.sun.health.comm.Const;
 import com.sun.health.core.comm.DataHolder;
 import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.FileUtil;
-import com.sun.health.core.util.JsonUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.entity.blood.BloodReportEntity;
+import com.sun.health.entity.ocr.OcrInfoEntity;
 import com.sun.health.repository.blood.BloodRepository;
 import com.sun.health.service.hospital.zhangzhou.ZhangZhouReportParser;
+import com.sun.health.service.ocr.OcrInfoService;
 import com.sun.health.service.tencent.TencentService;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.tencentcloudapi.ocr.v20181119.models.TextDetection;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -36,6 +35,9 @@ public class BloodService extends AbstractService {
 
     @Autowired
     private TencentService tencentService;
+
+    @Autowired
+    private OcrInfoService ocrService;
 
     @Autowired
     private ZhangZhouReportParser zhangZhouReportParser;
@@ -77,30 +79,19 @@ public class BloodService extends AbstractService {
      */
     public void handleZhangZhouReport() {
 
-        //1. 获取本地报告文件
-        String parentPath = Const.imagePath;
-        File parent = new File(parentPath);
-        File[] files = parent.listFiles();
+        //1. get orc result
+        List<Long> ocrIds = ocrService.getAllIds();
 
-        if (Objects.isNull(files)) {
-            logger.warn("{}目录下未找到报告文件.", parentPath);
-            return;
-        }
+        ocrIds.forEach(id -> {
 
-        //2. 调用第三方ocr
-        for (File file : files) {
-            GeneralBasicOCRResponse response;
-            try {
-                logger.info("开始:{}....", file.getName());
-                response = tencentService.basicOcr(FileUtil.toByteArrayByNio(file));
-            } catch (IOException e) {
-                logger.error("call tencent ocr api error. handle fileName:" + file.getName(), e);
-                continue;
+            OcrInfoEntity ocrInfo = ocrService.getById(id);
+
+            if (Objects.nonNull(ocrInfo)) {
+                // parse ocr
+                zhangZhouReportParser.parse(ocrInfo.getFileName(),ocrInfo.getJsonResponse());
             }
-            //3. 解析入库
-            zhangZhouReportParser.parse(JsonUtil.toJson(response));
-            logger.info("完成:{}", file.getName());
-        }
+
+        });
     }
 
     public boolean delete(String reportDate) {
