@@ -22,4 +22,5 @@ public interface BloodRepository extends JpaRepository<BloodReportEntity, Long> 
     List<BloodReportEntity> findByPatient(String patient);
 
     List<BloodReportEntity> findByReportDate(String reportDate);
+    
 }

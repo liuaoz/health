@@ -23,16 +23,31 @@ public class ReportController extends BaseController {
     private BloodReportService bloodReportService;
 
 
-    @GetMapping("/item/{item}")
-    public JsonRet<List<BloodDto>> get(@PathVariable String item) {
-
+    @GetMapping("/blood/item/{item}")
+    public JsonRet<List<BloodDto>> getByItem(@PathVariable String item) {
         List<BloodReportEntity> entities = bloodReportService.getByItem(item);
-        List<BloodDto> dtoList = entities.stream().map(t -> {
+        return JsonRet.success(toDto(entities));
+    }
+
+    @GetMapping("/blood/patient/{patient}")
+    public JsonRet<List<BloodDto>> getByPatient(@PathVariable String patient) {
+        List<BloodReportEntity> entities = bloodReportService.getByPatient(patient);
+        return JsonRet.success(toDto(entities));
+    }
+
+    @GetMapping("/blood")
+    public JsonRet<List<BloodDto>> getAll() {
+        List<BloodReportEntity> entities = bloodReportService.getAll();
+        return JsonRet.success(toDto(entities));
+    }
+
+
+    private List<BloodDto> toDto(List<BloodReportEntity> entities) {
+        return entities.stream().map(t -> {
             BloodDto dto = new BloodDto();
             BeanUtils.copyProperties(t, dto);
             return dto;
         }).collect(Collectors.toList());
-        return JsonRet.success(dtoList);
     }
 
 }

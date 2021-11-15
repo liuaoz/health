@@ -21,4 +21,10 @@ public class BloodReportService extends AbstractService {
     public List<BloodReportEntity> getByPatient(String patient) {
         return bloodRepository.findByPatient(patient);
     }
+
+    public List<BloodReportEntity> getAll(){
+        return bloodRepository.findAll();
+    }
+
+
 }
