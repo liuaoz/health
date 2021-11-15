@@ -46,6 +46,11 @@ public class BloodReportEntity extends BaseEntity {
     private String item;
 
     /**
+     * 指标名称代码
+     */
+    private String itemAbbr;
+
+    /**
      * 指标结果
      */
     private String result;
@@ -89,6 +94,11 @@ public class BloodReportEntity extends BaseEntity {
      * 科别
      */
     private String category;
+
+    /**
+     * 报告文件
+     */
+    private String fileName;
 
     public String getAcquisitionTime() {
         return acquisitionTime;
@@ -186,6 +196,14 @@ public class BloodReportEntity extends BaseEntity {
         this.doctor = doctor;
     }
 
+    public String getItemAbbr() {
+        return itemAbbr;
+    }
+
+    public void setItemAbbr(String itemAbbr) {
+        this.itemAbbr = itemAbbr;
+    }
+
     public String getCategory() {
         return category;
     }
@@ -208,5 +226,13 @@ public class BloodReportEntity extends BaseEntity {
 
     public void setSpecimenType(String specimenType) {
         this.specimenType = specimenType;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

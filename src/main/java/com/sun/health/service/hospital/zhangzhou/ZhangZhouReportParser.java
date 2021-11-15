@@ -1,5 +1,6 @@
 package com.sun.health.service.hospital.zhangzhou;
 
+import com.sun.health.comm.KeyValueHolder;
 import com.sun.health.comm.ZhangZhouReportBasicItem;
 import com.sun.health.comm.ZhangZhouReportItemTitle;
 import com.sun.health.core.util.NumberUtil;
@@ -24,12 +25,6 @@ public class ZhangZhouReportParser extends AbstractService {
 
     @Autowired
     private BloodRepository bloodRepository;
-
-    public static void main(String[] args) {
-        Map<String, String> map = new HashMap<>();
-        String value = map.get(null);
-        System.out.println(value);
-    }
 
     public void parse(String fileName, String content) {
         //1. 检测方法之后，进入检测项目
@@ -115,10 +110,7 @@ public class ZhangZhouReportParser extends AbstractService {
             logger.warn("{}解析的结果中，项目标题不完整！！！", fileName);
             return;
         }
-//        logger.info("结果-x:" + resultPolygon.getX());
-//        logger.info("参考范围-x:" + referencePolygon.getX());
-//        logger.info("单位-x:" + unitPolygon.getX());
-//        logger.info("检测方法-x:" + inspectionMethodPolygon.getX());
+        logger.info("文件:{},标题栏X坐标----[结果:{}|参考范围:{}|单位:{}|检测方法:{}]", fileName, resultPolygon.getX(), referencePolygon.getX(), unitPolygon.getX(), inspectionMethodPolygon.getX());
 
         Coord finalResultPolygon = resultPolygon;
         Coord finalReferencePolygon = referencePolygon;
@@ -141,8 +133,11 @@ public class ZhangZhouReportParser extends AbstractService {
             entity.setReportDate(finalReportDate);
             entity.setInspectionPurpose(finalInspectionPurpose);
             entity.setSpecimenType(finalSpecimenType);
+            entity.setFileName(fileName);
 
-            entity.setItem(item);
+            KeyValueHolder<String, String> kv = filterItem(item, fileName);
+            entity.setItem(kv.getKey());
+            entity.setItemAbbr(kv.getValue());
 
             for (Text text : texts) {
                 boolean match = false;
@@ -166,7 +161,7 @@ public class ZhangZhouReportParser extends AbstractService {
                     match = true;
                 }
                 if (!match) {
-                    logger.warn("文件:{},项目:{},没有正常处理的识别文本：{}", fileName, item, text.getValue());
+                    logger.warn("文件:{},项目:{},文本:{},X坐标:{}", fileName, item, text.getValue(), text.getX());
                 }
             }
             return entity;
@@ -177,7 +172,35 @@ public class ZhangZhouReportParser extends AbstractService {
         }
     }
 
-    public static boolean isItem(String text) {
+    /**
+     * 处理项目名称。由ocr解析误差造成的错误
+     *
+     * @param item 项目名称(指标名称)
+     */
+    public KeyValueHolder<String, String> filterItem(String item, String fileName) {
+
+        String itemRealName = item;//指标名称
+        String abbr = null;// 指标简称（英文代码简称）
+        //1. 处理前缀。 去除前面的数字，可能1位或者两位数字
+        if (NumberUtil.isNumeric(itemRealName.charAt(0))) {
+            itemRealName = itemRealName.substring(1);
+            if (NumberUtil.isNumeric(itemRealName.charAt(0))) {
+                itemRealName = itemRealName.substring(1);
+            }
+            logger.info("文件:{},项目名称:{},前缀处理后结果为：{}", fileName, item, itemRealName);
+        }
+        //2. 处理后缀。 去掉尾部的代码简称
+        int i = itemRealName.indexOf("(");
+        if (i != -1) {
+            String tail = itemRealName.substring(i + 1, itemRealName.length() - 1);
+            itemRealName = itemRealName.substring(0, i);
+            abbr = tail.replaceAll(":", "").replaceAll("\\)", "");
+            logger.info("文件:{},项目名称:{},后缀处理后结果为：{}", fileName, item, itemRealName);
+        }
+        return new KeyValueHolder<>(itemRealName, abbr);
+    }
+
+    public boolean isItem(String text) {
         return !StringUtil.isEmpty(text) && StringUtil.isContainChinese(text) && (text.contains("(") || text.contains("}"));
     }
 

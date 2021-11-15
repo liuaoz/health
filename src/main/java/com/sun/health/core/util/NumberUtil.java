@@ -15,4 +15,19 @@ public final class NumberUtil {
     public static boolean isSimilar(Number a, Number b, Number delta) {
         return Math.abs(a.doubleValue() - b.doubleValue()) < delta.doubleValue();
     }
+
+    /**
+     * 判断一个字符是否为数字
+     */
+    public static boolean isNumeric(char c) {
+        return Character.isDigit(c);
+    }
+
+    /**
+     * 判断一个字符串是否为数值
+     */
+    public static boolean isNumeric(String str) {
+
+        return false;
+    }
 }
