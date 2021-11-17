@@ -187,7 +187,7 @@ public class ZhangZhouReportParser extends AbstractService {
             if (NumberUtil.isNumeric(itemRealName.charAt(0))) {
                 itemRealName = itemRealName.substring(1);
             }
-            logger.info("文件:{},项目名称:{},前缀处理后结果为：{}", fileName, item, itemRealName);
+//            logger.info("文件:{},项目名称:{},前缀处理后结果为：{}", fileName, item, itemRealName);
         }
         //2. 处理后缀。 去掉尾部的代码简称
         int i = itemRealName.indexOf("(");
@@ -195,7 +195,7 @@ public class ZhangZhouReportParser extends AbstractService {
             String tail = itemRealName.substring(i + 1, itemRealName.length() - 1);
             itemRealName = itemRealName.substring(0, i);
             abbr = tail.replaceAll(":", "").replaceAll("\\)", "");
-            logger.info("文件:{},项目名称:{},后缀处理后结果为：{}", fileName, item, itemRealName);
+//            logger.info("文件:{},项目名称:{},后缀处理后结果为：{}", fileName, item, itemRealName);
         }
         return new KeyValueHolder<>(itemRealName, abbr);
     }
