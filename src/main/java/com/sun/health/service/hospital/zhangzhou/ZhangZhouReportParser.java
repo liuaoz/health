@@ -197,6 +197,8 @@ public class ZhangZhouReportParser extends AbstractService {
             abbr = tail.replaceAll(":", "").replaceAll("\\)", "");
 //            logger.info("文件:{},项目名称:{},后缀处理后结果为：{}", fileName, item, itemRealName);
         }
+        //3. 特殊字符处理。 去掉*
+        itemRealName = itemRealName.replaceAll("\\*", "");
         return new KeyValueHolder<>(itemRealName, abbr);
     }
 
