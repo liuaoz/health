@@ -2,6 +2,7 @@ package com.sun.health.repository.blood;
 
 import com.sun.health.entity.blood.BloodReportEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.List;
  * @since : 2021/8/22
  **/
 @Repository
-public interface BloodRepository extends JpaRepository<BloodReportEntity, Long> {
+public interface BloodReportRepository extends JpaRepository<BloodReportEntity, Long>, JpaSpecificationExecutor<BloodReportEntity> {
 
     int deleteByReportDate(String reportDate);
 
@@ -22,5 +23,5 @@ public interface BloodRepository extends JpaRepository<BloodReportEntity, Long> 
     List<BloodReportEntity> findByPatient(String patient);
 
     List<BloodReportEntity> findByReportDate(String reportDate);
-    
+
 }

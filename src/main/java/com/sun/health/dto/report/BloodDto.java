@@ -4,6 +4,8 @@ import com.sun.health.dto.BaseDTO;
 
 public class BloodDto extends BaseDTO {
 
+    private String patient;
+
     private String item;
 
     private String result;
@@ -11,6 +13,14 @@ public class BloodDto extends BaseDTO {
     private String reportDate;
 
     private String reference;
+
+    public String getPatient() {
+        return patient;
+    }
+
+    public void setPatient(String patient) {
+        this.patient = patient;
+    }
 
     public String getItem() {
         return item;

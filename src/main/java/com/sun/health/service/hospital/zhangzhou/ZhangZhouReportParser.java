@@ -6,7 +6,7 @@ import com.sun.health.comm.ZhangZhouReportItemTitle;
 import com.sun.health.core.util.NumberUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.entity.blood.BloodReportEntity;
-import com.sun.health.repository.blood.BloodRepository;
+import com.sun.health.repository.blood.BloodReportRepository;
 import com.sun.health.service.AbstractService;
 import com.tencentcloudapi.ocr.v20181119.models.Coord;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
@@ -24,7 +24,7 @@ public class ZhangZhouReportParser extends AbstractService {
     public static final int COMMON_DELTA = 30;
 
     @Autowired
-    private BloodRepository bloodRepository;
+    private BloodReportRepository bloodRepository;
 
     public void parse(String fileName, String content) {
         //1. 检测方法之后，进入检测项目

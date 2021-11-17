@@ -6,7 +6,7 @@ import com.sun.health.core.util.FileUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.entity.blood.BloodReportEntity;
 import com.sun.health.entity.ocr.OcrInfoEntity;
-import com.sun.health.repository.blood.BloodRepository;
+import com.sun.health.repository.blood.BloodReportRepository;
 import com.sun.health.service.hospital.zhangzhou.ZhangZhouReportParser;
 import com.sun.health.service.ocr.OcrInfoService;
 import com.sun.health.service.tencent.TencentService;
@@ -31,7 +31,7 @@ public class BloodService extends AbstractService {
     private static final String PARENT_DIR = "D:\\report\\";
 
     @Autowired
-    private BloodRepository bloodRepository;
+    private BloodReportRepository bloodReportRepository;
 
     @Autowired
     private TencentService tencentService;
@@ -95,7 +95,7 @@ public class BloodService extends AbstractService {
     }
 
     public boolean delete(String reportDate) {
-        bloodRepository.deleteByReportDate(reportDate);
+        bloodReportRepository.deleteByReportDate(reportDate);
         return true;
     }
 
@@ -201,15 +201,15 @@ public class BloodService extends AbstractService {
     }
 
     public void save(List<BloodReportEntity> list) {
-        bloodRepository.saveAll(list);
+        bloodReportRepository.saveAll(list);
     }
 
     public List<BloodReportEntity> findByItem(String item) {
-        return bloodRepository.findByItem(item);
+        return bloodReportRepository.findByItem(item);
     }
 
     public List<BloodReportEntity> findByReportDate(String reportDate) {
-        return bloodRepository.findByReportDate(reportDate);
+        return bloodReportRepository.findByReportDate(reportDate);
     }
 
 }

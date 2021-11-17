@@ -7,10 +7,7 @@ import com.sun.health.entity.blood.BloodReportEntity;
 import com.sun.health.service.report.BloodReportService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +19,13 @@ public class ReportController extends BaseController {
     @Autowired
     private BloodReportService bloodReportService;
 
+    @GetMapping("/blood")
+    public JsonRet<List<BloodDto>> get(@RequestBody BloodDto dto) {
+
+        List<BloodReportEntity> entities = bloodReportService.getByCond(dto);
+
+        return JsonRet.success(toDto(entities));
+    }
 
     @GetMapping("/blood/item/{item}")
     public JsonRet<List<BloodDto>> getByItem(@PathVariable String item) {
@@ -34,13 +38,6 @@ public class ReportController extends BaseController {
         List<BloodReportEntity> entities = bloodReportService.getByPatient(patient);
         return JsonRet.success(toDto(entities));
     }
-
-    @GetMapping("/blood")
-    public JsonRet<List<BloodDto>> getAll() {
-        List<BloodReportEntity> entities = bloodReportService.getAll();
-        return JsonRet.success(toDto(entities));
-    }
-
 
     private List<BloodDto> toDto(List<BloodReportEntity> entities) {
         return entities.stream().map(t -> {
