@@ -8,6 +8,7 @@ import com.sun.health.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
@@ -22,13 +23,14 @@ public class BloodReportService extends AbstractService {
 
     public List<BloodReportEntity> getByCond(BloodDto dto) {
 
+        Sort sort = Sort.by(Sort.Direction.DESC, "reportDate");
 
-        List<BloodReportEntity> entities = bloodReportRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+        return bloodReportRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
 
             if (!StringUtil.isEmpty(dto.getItem())) {
-                predicates.add((criteriaBuilder.equal(root.get("item"), dto.getItem())));
+                predicates.add((criteriaBuilder.like(root.get("item"), "%" + dto.getItem() + "%")));
             }
 
             if (!StringUtil.isEmpty(dto.getReportDate())) {
@@ -39,9 +41,7 @@ public class BloodReportService extends AbstractService {
                 predicates.add((criteriaBuilder.equal(root.get("patient"), dto.getPatient())));
             }
             return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
-        });
-
-        return entities;
+        }, sort);
     }
 
     public List<BloodReportEntity> getByItem(String item) {

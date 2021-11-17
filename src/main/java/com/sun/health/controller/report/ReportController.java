@@ -19,7 +19,7 @@ public class ReportController extends BaseController {
     @Autowired
     private BloodReportService bloodReportService;
 
-    @GetMapping("/blood")
+    @PostMapping("/blood")
     public JsonRet<List<BloodDto>> get(@RequestBody BloodDto dto) {
 
         List<BloodReportEntity> entities = bloodReportService.getByCond(dto);
