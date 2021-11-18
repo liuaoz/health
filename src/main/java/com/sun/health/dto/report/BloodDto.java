@@ -14,6 +14,8 @@ public class BloodDto extends BaseDTO {
 
     private String reference;
 
+    private String inspectionPurpose;
+
     public String getPatient() {
         return patient;
     }
@@ -52,5 +54,13 @@ public class BloodDto extends BaseDTO {
 
     public void setReference(String reference) {
         this.reference = reference;
+    }
+
+    public String getInspectionPurpose() {
+        return inspectionPurpose;
+    }
+
+    public void setInspectionPurpose(String inspectionPurpose) {
+        this.inspectionPurpose = inspectionPurpose;
     }
 }

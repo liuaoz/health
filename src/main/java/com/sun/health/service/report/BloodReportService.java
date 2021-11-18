@@ -6,8 +6,6 @@ import com.sun.health.entity.blood.BloodReportEntity;
 import com.sun.health.repository.blood.BloodReportRepository;
 import com.sun.health.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +37,9 @@ public class BloodReportService extends AbstractService {
 
             if (!StringUtil.isEmpty(dto.getPatient())) {
                 predicates.add((criteriaBuilder.equal(root.get("patient"), dto.getPatient())));
+            }
+            if (!StringUtil.isEmpty(dto.getInspectionPurpose())) {
+                predicates.add((criteriaBuilder.like(root.get("inspectionPurpose"), "%" + dto.getInspectionPurpose() + "%")));
             }
             return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
         }, sort);
