@@ -27,6 +27,24 @@ public class ReportController extends BaseController {
         return JsonRet.success(toDto(entities));
     }
 
+    @GetMapping("/blood/inspectionPurposes")
+    public JsonRet<List<String>> getInspectionPurposes() {
+        List<String> list = List.of(
+                "请选择",
+                "肌钙蛋白I",
+                "降钙素原",
+                "心肌酶",
+                "血常规(六分类)",
+                "凝血四项",
+                "血浆D2聚体",
+                "血气分析+电解质",
+                "肝肾功电解质",
+                "B型钠尿肽测定",
+                "CA199+CEA，AFP，CA125"
+        );
+        return JsonRet.success(list);
+    }
+
     @GetMapping("/blood/item/{item}")
     public JsonRet<List<BloodDto>> getByItem(@PathVariable String item) {
         List<BloodReportEntity> entities = bloodReportService.getByItem(item);
