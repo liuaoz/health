@@ -1,5 +1,6 @@
 package com.sun.health.service;
 
+import com.sun.health.comm.DoStatus;
 import com.sun.health.core.comm.DataHolder;
 import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.FileUtil;
@@ -80,7 +81,7 @@ public class BloodService extends AbstractService {
     public void handleZhangZhouReport() {
 
         //1. get orc result
-        List<Long> ocrIds = ocrService.getAllIds();
+        List<Long> ocrIds = ocrService.findIds(DoStatus.doing.name());
 
         ocrIds.forEach(id -> {
 

@@ -20,7 +20,9 @@ public class OcrInfoEntity extends BaseEntity {
     @Column(columnDefinition = "MEDIUMTEXT")
     private String jsonResponse;
 
-    private String status;
+    private String ocrStatus;
+
+    private String parseStatus;
 
     public String getFileName() {
         return fileName;
@@ -54,11 +56,19 @@ public class OcrInfoEntity extends BaseEntity {
         this.jsonResponse = jsonResponse;
     }
 
-    public String getStatus() {
-        return status;
+    public String getOcrStatus() {
+        return ocrStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOcrStatus(String ocrStatus) {
+        this.ocrStatus = ocrStatus;
+    }
+
+    public String getParseStatus() {
+        return parseStatus;
+    }
+
+    public void setParseStatus(String parseStatus) {
+        this.parseStatus = parseStatus;
     }
 }

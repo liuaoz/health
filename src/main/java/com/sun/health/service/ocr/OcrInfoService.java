@@ -35,6 +35,10 @@ public class OcrInfoService extends AbstractService {
         return ocrInfoRepository.findAllIds();
     }
 
+    public List<Long> findIds(String parseStatus){
+        return ocrInfoRepository.findIds(parseStatus);
+    }
+
     public OcrInfoEntity get(String fileName) {
         List<OcrInfoEntity> entities = ocrInfoRepository.findByFileName(fileName);
         return entities.isEmpty() ? null : entities.get(0);
@@ -60,13 +64,13 @@ public class OcrInfoService extends AbstractService {
                 entity.setFileName(file.getName());
                 entity.setContent(content);
                 entity.setSupplier(Supplier.Tencent.name());
-                entity.setStatus(DoStatus.todo.name());
+                entity.setOcrStatus(DoStatus.todo.name());
 
                 GeneralBasicOCRResponse response = tencentService.basicOcr(content);
                 entity.setJsonResponse(JsonUtil.toJson(response));
-                entity.setStatus(DoStatus.done.name());
+                entity.setOcrStatus(DoStatus.done.name());
             } catch (IOException e) {
-                entity.setStatus(DoStatus.doing.name());
+                entity.setOcrStatus(DoStatus.doing.name());
                 logger.error("call tencent ocr api error.", e);
             }
             ocrInfoRepository.save(entity);

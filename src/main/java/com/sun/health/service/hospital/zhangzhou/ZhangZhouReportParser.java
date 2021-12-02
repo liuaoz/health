@@ -60,7 +60,10 @@ public class ZhangZhouReportParser extends AbstractService {
                 if (textDetection.getDetectedText().contains(ZhangZhouReportBasicItem.acquisitionTime.getName())) {
                     acquisitionTime = textDetection.getDetectedText();
                     acquisitionTime = acquisitionTime.replace(ZhangZhouReportBasicItem.acquisitionTime.getName() + ":", "");
-                    reportDate = acquisitionTime.substring(0, 10);
+                    if (acquisitionTime.length()>=10){
+                        reportDate = acquisitionTime.substring(0, 10);
+                    }
+
                 }
 
                 // 获取标本种类
@@ -146,7 +149,7 @@ public class ZhangZhouReportParser extends AbstractService {
                     match = true;
                 }
 
-                if (NumberUtil.isSimilar(text.getX(), finalReferencePolygon.getX(), 40)) {
+                if (NumberUtil.isSimilar(text.getX(), finalReferencePolygon.getX(), 70)) {
                     entity.setReference(text.getValue());
                     match = true;
                 }
@@ -156,7 +159,7 @@ public class ZhangZhouReportParser extends AbstractService {
                     match = true;
                 }
 
-                if (NumberUtil.isSimilar(text.getX(), finalInspectionMethodPolygon.getX(), 50)) {
+                if (NumberUtil.isSimilar(text.getX(), finalInspectionMethodPolygon.getX(), 70)) {
                     entity.setInspectionMethod(text.getValue());
                     match = true;
                 }
