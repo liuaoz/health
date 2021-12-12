@@ -2,7 +2,6 @@ package com.sun.health.service.bandao;
 
 import com.sun.health.config.WxPayConfig;
 import com.sun.health.core.util.JsonUtil;
-import com.sun.health.core.util.StringUtil;
 import com.sun.health.dto.bandao.pay.PayOrderDto;
 import com.sun.health.service.AbstractService;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
@@ -39,7 +38,7 @@ public class WxPayService extends AbstractService {
 
     private static final String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
     private static final String notify_url = "https://www.sunoribt.com";
-    private static final String myopenid = "owJBV43C3ugI76lqpuFpzWQt7o3c";
+    private static final String myOpenid = "owJBV43C3ugI76lqpuFpzWQt7o3c";
 
     private CloseableHttpClient httpClient;
 
@@ -115,7 +114,7 @@ public class WxPayService extends AbstractService {
                 .buildAmount(1, "CNY")
                 .buildDescription("this is desc")
                 .buildMchid(wxPayConfig.getMchId())
-                .buildPayer(myopenid)
+                .buildPayer(myOpenid)
                 .buildNotifyUrl(notify_url)
                 .buildOutTradeNo(UUID.randomUUID().toString().substring(0, 32))
                 .build();
