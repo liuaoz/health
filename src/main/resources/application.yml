@@ -37,3 +37,5 @@ wx:
   mchId: ${WX_MCH_ID:xx}
   mchSerialNo: ${WX_MCH_SERIAL_NO:xx}
   apiV3Key: ${WX_API_V3_KEY:xx}
+  appid: ${WX_APP_ID:xx}
+  appSecret: ${WX_APP_SECRET:xx}

@@ -11,6 +11,8 @@ public class WxPayConfig {
     private String mchId;
     private String mchSerialNo;
     private String apiV3Key;
+    private String appSecret;
+    private String appid;
 
     public String getPrivateKey() {
         return privateKey;
@@ -42,5 +44,21 @@ public class WxPayConfig {
 
     public void setApiV3Key(String apiV3Key) {
         this.apiV3Key = apiV3Key;
+    }
+
+    public String getAppSecret() {
+        return appSecret;
+    }
+
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
+    }
+
+    public String getAppid() {
+        return appid;
+    }
+
+    public void setAppid(String appid) {
+        this.appid = appid;
     }
 }

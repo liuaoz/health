@@ -1,26 +1,38 @@
 package com.sun.health.dto.bandao.pay;
 
 public class PayOrderDto {
+    private String appid;
     private Amount amount;
     private String mchid;
     private String description;
     private String notify_url;
     private Payer payer;
+    private String out_trade_no;
 
     public PayOrderDto() {
         this(new Builder());
     }
 
     public PayOrderDto(Builder builder){
+        this.appid = builder.appid;
         this.amount = builder.amount;
         this.mchid = builder.mchid;
         this.description = builder.description;
         this.notify_url = builder.notify_url;
         this.payer = builder.payer;
+        this.out_trade_no = builder.out_trade_no;
     }
 
     public  Builder newBuilder(){
         return new Builder(this);
+    }
+
+    public String getAppid() {
+        return appid;
+    }
+
+    public void setAppid(String appid) {
+        this.appid = appid;
     }
 
     public Amount getAmount() {
@@ -63,12 +75,22 @@ public class PayOrderDto {
         this.payer = payer;
     }
 
+    public String getOut_trade_no() {
+        return out_trade_no;
+    }
+
+    public void setOut_trade_no(String out_trade_no) {
+        this.out_trade_no = out_trade_no;
+    }
+
     public static class Builder {
+        private String appid;
         private Amount amount;
         private String mchid;
         private String description;
         private String notify_url;
         private Payer payer;
+        private String out_trade_no;
 
         public Builder() {
         }
@@ -78,11 +100,17 @@ public class PayOrderDto {
         }
 
         public Builder(PayOrderDto payOrderDto) {
+            this.appid = payOrderDto.appid;
             this.amount = payOrderDto.amount;
             this.mchid = payOrderDto.mchid;
             this.description = payOrderDto.description;
             this.notify_url = payOrderDto.notify_url;
             this.payer = payOrderDto.payer;
+        }
+
+        public Builder buildAppid(String appid){
+            this.appid = appid;
+            return this;
         }
 
         public Builder buildAmount(int total,String currency){
@@ -107,12 +135,14 @@ public class PayOrderDto {
             return this;
         }
 
-        public Builder buildPayer(String openid,String out_trade_no, String goods_tag, String appid){
+        public Builder buildPayer(String openid){
             this.payer = new Payer();
             this.payer.setOpenid(openid);
-            this.payer.setOut_trade_no(out_trade_no);
-            this.payer.setGoods_tag(goods_tag);
-            this.payer.setAppid(appid);
+            return this;
+        }
+
+        public Builder buildOutTradeNo(String out_trade_no){
+            this.out_trade_no = out_trade_no;
             return this;
         }
     }
@@ -120,9 +150,6 @@ public class PayOrderDto {
 
 class Payer {
     private String openid;
-    private String out_trade_no;
-    private String goods_tag;
-    private String appid;
 
     public String getOpenid() {
         return openid;
@@ -130,30 +157,6 @@ class Payer {
 
     public void setOpenid(String openid) {
         this.openid = openid;
-    }
-
-    public String getOut_trade_no() {
-        return out_trade_no;
-    }
-
-    public void setOut_trade_no(String out_trade_no) {
-        this.out_trade_no = out_trade_no;
-    }
-
-    public String getGoods_tag() {
-        return goods_tag;
-    }
-
-    public void setGoods_tag(String goods_tag) {
-        this.goods_tag = goods_tag;
-    }
-
-    public String getAppid() {
-        return appid;
-    }
-
-    public void setAppid(String appid) {
-        this.appid = appid;
     }
 }
 

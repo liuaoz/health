@@ -2,6 +2,7 @@ package com.sun.health.service.bandao;
 
 import com.sun.health.config.WxPayConfig;
 import com.sun.health.core.util.JsonUtil;
+import com.sun.health.core.util.StringUtil;
 import com.sun.health.dto.bandao.pay.PayOrderDto;
 import com.sun.health.service.AbstractService;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
@@ -21,12 +22,14 @@ import org.springframework.stereotype.Service;
 
 import javax.net.ssl.SSLContext;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
+import java.util.UUID;
 
 @Service
 public class WxPayService extends AbstractService {
@@ -35,7 +38,8 @@ public class WxPayService extends AbstractService {
     private WxPayConfig wxPayConfig;
 
     private static final String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
-    private static final String notify_url = "";
+    private static final String notify_url = "https://www.sunoribt.com";
+    private static final String myopenid = "owJBV43C3ugI76lqpuFpzWQt7o3c";
 
     private CloseableHttpClient httpClient;
 
@@ -107,12 +111,31 @@ public class WxPayService extends AbstractService {
     private PayOrderDto assemble() {
 
         return new PayOrderDto().newBuilder()
+                .buildAppid(wxPayConfig.getAppid())
                 .buildAmount(1, "CNY")
                 .buildDescription("this is desc")
                 .buildMchid(wxPayConfig.getMchId())
-                .buildPayer("openidxxx", "orderno111", "紫菜", "appidxxx")
+                .buildPayer(myopenid)
                 .buildNotifyUrl(notify_url)
+                .buildOutTradeNo(UUID.randomUUID().toString().substring(0, 32))
                 .build();
+    }
+
+    public void getOpenid() {
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .uri(URI.create("https://api.weixin.qq.com/sns/jscode2session?appid=" + wxPayConfig.getAppid()
+                        + "&secret=" + wxPayConfig.getAppSecret() + "&js_code=041P2rFa1lTdhC0w2pIa1wSbA40P2rFf&grant_type=authorization_code"))
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info("get openid response: {}", response.body());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public SSLContext getSSLContext() {
