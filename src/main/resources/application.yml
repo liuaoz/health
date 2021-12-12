@@ -31,3 +31,9 @@ cloud:
     appId: ${KDXF_APP_ID:appId}
     appKey: ${KDXF_APP_KEY:appKey}
     ocrUrl: https://webapi.xfyun.cn/v1/service/v1/ocr/general
+
+wx:
+  privateKey: ${WX_PRIVATE_KEY:XX}
+  mchId: ${WX_MCH_ID:xx}
+  mchSerialNo: ${WX_MCH_SERIAL_NO:xx}
+  apiV3Key: ${WX_API_V3_KEY:xx}
