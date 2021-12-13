@@ -2,7 +2,11 @@ package com.sun.health.service.bandao;
 
 import com.sun.health.config.WxPayConfig;
 import com.sun.health.core.util.JsonUtil;
+import com.sun.health.core.util.SafeUtil;
+import com.sun.health.core.util.StringUtil;
+import com.sun.health.core.util.XmlUtil;
 import com.sun.health.dto.bandao.pay.PayOrderDto;
+import com.sun.health.dto.bandao.pay.UnifiedOrderRespDto;
 import com.sun.health.service.AbstractService;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
@@ -30,6 +34,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.util.UUID;
 
+/**
+ * 1. 小程序中的统一下单和jsapi有什么区别？
+ */
 @Service
 public class WxPayService extends AbstractService {
 
@@ -37,10 +44,44 @@ public class WxPayService extends AbstractService {
     private WxPayConfig wxPayConfig;
 
     private static final String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
+    public static final String url_unified_order = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     private static final String notify_url = "https://www.sunoribt.com";
     private static final String myOpenid = "owJBV43C3ugI76lqpuFpzWQt7o3c";
+    public static final String spbill_create_ip = "183.195.41.221";
 
     private CloseableHttpClient httpClient;
+
+
+    /**
+     * 统一下单
+     */
+    public boolean unifiedOrder() {
+        String body = assembleBody();
+
+        HttpClient client = HttpClient.newBuilder().build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url_unified_order))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("content-type", "text/xml")
+                .build();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            int statusCode = response.statusCode();
+            if (HttpStatus.valueOf(statusCode).is2xxSuccessful()) {
+                logger.info("unified order response: {}", response.body());
+                UnifiedOrderRespDto respDto = XmlUtil.convertXmlStrToObject(UnifiedOrderRespDto.class, response.body());
+            } else {
+                logger.error("unified order response code:" + statusCode);
+                return false;
+            }
+        } catch (IOException | InterruptedException e) {
+            logger.error("unified order error.", e);
+            return false;
+        }
+        return true;
+    }
 
     /**
      * 创建支付订单
@@ -107,12 +148,54 @@ public class WxPayService extends AbstractService {
         return true;
     }
 
+    private String assembleBody() {
+
+        String goodDesc = "紫菜";
+        int totalFee = 10;
+        String tradeType = "JSAPI";
+        String nonceStr = StringUtil.rand32Str();
+        String outTradeNo = StringUtil.rand32Str();
+
+        String temp = String.join("&",
+                "appid=" + wxPayConfig.getAppid(),
+                "body=" + goodDesc,
+                "mch_id=" + wxPayConfig.getMchId(),
+                "nonce_str=" + nonceStr,
+                "notify_url=" + notify_url,
+                "openid=" + myOpenid,
+                "out_trade_no=" + outTradeNo,
+                "spbill_create_ip=" + spbill_create_ip,
+                "total_fee=" + totalFee,
+                "trade_type=" + tradeType,
+                "key=" + wxPayConfig.getKey()
+        );
+
+
+        String sign = SafeUtil.md5(temp).toUpperCase();
+
+        String body = "<xml>"
+                + "<appid>" + wxPayConfig.getAppid() + "</appid>"
+                + "<body>" + goodDesc + "</body>"
+                + "<mch_id>" + wxPayConfig.getMchId() + "</mch_id>"
+                + "<nonce_str>" + nonceStr + "</nonce_str>"
+                + "<notify_url>" + notify_url + "</notify_url>"
+                + "<openid>" + myOpenid + "</openid>"
+                + "<out_trade_no>" + outTradeNo + "</out_trade_no>"
+                + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"
+                + "<total_fee>" + totalFee + "</total_fee>"
+                + "<trade_type>" + tradeType + "</trade_type>"
+                + "<sign>" + sign + "</sign>"
+                + "</xml>";
+
+        return body;
+    }
+
     private PayOrderDto assemble() {
 
         return new PayOrderDto().newBuilder()
                 .buildAppid(wxPayConfig.getAppid())
                 .buildAmount(1, "CNY")
-                .buildDescription("this is desc")
+                .buildDescription("半岛兄弟")
                 .buildMchid(wxPayConfig.getMchId())
                 .buildPayer(myOpenid)
                 .buildNotifyUrl(notify_url)
@@ -126,7 +209,7 @@ public class WxPayService extends AbstractService {
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create("https://api.weixin.qq.com/sns/jscode2session?appid=" + wxPayConfig.getAppid()
-                        + "&secret=" + wxPayConfig.getAppSecret() + "&js_code=041P2rFa1lTdhC0w2pIa1wSbA40P2rFf&grant_type=authorization_code"))
+                        + "&secret=" + wxPayConfig.getAppSecret() + "&js_code=0815ys200C07ZM1dRb300SGt0w35ys2F&grant_type=authorization_code"))
                 .build();
 
         try {

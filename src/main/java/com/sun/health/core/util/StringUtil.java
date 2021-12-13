@@ -5,6 +5,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,4 +60,7 @@ public final class StringUtil {
         return new DataHolder<>(false, null);
     }
 
+    public static String rand32Str() {
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 32);
+    }
 }

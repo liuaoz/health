@@ -33,6 +33,7 @@ cloud:
     ocrUrl: https://webapi.xfyun.cn/v1/service/v1/ocr/general
 
 wx:
+  key: ${WX_KEY:xx}
   privateKey: ${WX_PRIVATE_KEY:XX}
   mchId: ${WX_MCH_ID:xx}
   mchSerialNo: ${WX_MCH_SERIAL_NO:xx}

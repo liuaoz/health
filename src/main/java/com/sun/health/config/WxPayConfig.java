@@ -7,12 +7,21 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "wx")
 public class WxPayConfig {
 
+    private String key;
     private String privateKey;
     private String mchId;
     private String mchSerialNo;
     private String apiV3Key;
     private String appSecret;
     private String appid;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getPrivateKey() {
         return privateKey;

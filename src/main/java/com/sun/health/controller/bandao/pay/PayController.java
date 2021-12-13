@@ -16,8 +16,8 @@ public class PayController extends BaseController {
     private WxPayService wxPayService;
 
     @GetMapping("/wx")
-    public JsonRet<String> pay(){
-        wxPayService.createPayOrder();
+    public JsonRet<String> pay() {
+        wxPayService.unifiedOrder();
 //        wxPayService.getOpenid();
         return JsonRet.success();
     }
