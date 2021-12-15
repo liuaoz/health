@@ -31,7 +31,7 @@ public class OrderMasterEntity extends BaseEntity {
     private int goodQuantity;
 
     /**
-     * 用户
+     * 用户(下单人)
      */
     private String userCode;
 
@@ -49,6 +49,41 @@ public class OrderMasterEntity extends BaseEntity {
      * 发货时间
      */
     private Date shippedTime;
+
+    /**
+     * 收获时间
+     */
+    private Date receiveTime;
+
+    /**
+     * 收件人名称
+     */
+    private String receiverName;
+
+    /**
+     * 收件人电话
+     */
+    private String phone;
+
+    /**
+     * 省
+     */
+    private String province;
+
+    /**
+     * 市
+     */
+    private String city;
+
+    /**
+     * 区
+     */
+    private String district;
+
+    /**
+     * 地址
+     */
+    private String address;
 
 
 
