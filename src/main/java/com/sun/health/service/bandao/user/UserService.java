@@ -20,9 +20,8 @@ public class UserService extends AbstractService {
         return userRepository.findByOpenId(openId);
     }
 
-    public boolean createUser() {
-
-        return true;
+    public UserEntity createUser(UserEntity user) {
+        return userRepository.save(user);
     }
 
     public boolean exist(String openId) {

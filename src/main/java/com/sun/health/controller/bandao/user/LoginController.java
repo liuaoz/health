@@ -20,8 +20,8 @@ public class LoginController extends BaseController {
     @PostMapping
     public JsonRet<String> login(@RequestBody LoginDto dto) {
 
-        loginService.login(dto.getCode());
+        String token = loginService.login(dto.getCode());
 
-        return JsonRet.success();
+        return JsonRet.success(token);
     }
 }
