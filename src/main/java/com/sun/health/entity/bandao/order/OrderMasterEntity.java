@@ -85,6 +85,123 @@ public class OrderMasterEntity extends BaseEntity {
      */
     private String address;
 
+    public String getOrderNo() {
+        return orderNo;
+    }
 
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
+    public int getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(int totalFee) {
+        this.totalFee = totalFee;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getGoodQuantity() {
+        return goodQuantity;
+    }
+
+    public void setGoodQuantity(int goodQuantity) {
+        this.goodQuantity = goodQuantity;
+    }
+
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
+
+    public Date getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+    public Date getShippedTime() {
+        return shippedTime;
+    }
+
+    public void setShippedTime(Date shippedTime) {
+        this.shippedTime = shippedTime;
+    }
+
+    public Date getReceiveTime() {
+        return receiveTime;
+    }
+
+    public void setReceiveTime(Date receiveTime) {
+        this.receiveTime = receiveTime;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

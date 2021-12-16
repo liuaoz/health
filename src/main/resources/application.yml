@@ -12,6 +12,10 @@ spring:
   mvc:
     servlet:
       path: /health
+  redis:
+    host: 127.0.0.1
+    database: 0
+
   data:
     redis:
       repositories:
@@ -19,6 +23,7 @@ spring:
     elasticsearch:
       repositories:
         enabled: false
+
 
 cloud:
   tencent:
