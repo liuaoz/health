@@ -15,7 +15,7 @@ public class TokenService extends AbstractService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    public String generateToken(UserEntity user) {
+    public String createToken(UserEntity user) {
 
         String token = StringUtil.rand32Str();
 

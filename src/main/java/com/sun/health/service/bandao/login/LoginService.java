@@ -26,13 +26,12 @@ public class LoginService extends AbstractService {
      */
     public void login(String code) {
 
-        tokenService.generateToken(null);
+        tokenService.createToken(null);
 
-        SessionDto result = wxService.login(code);
+        SessionDto result = wxService.getUserSession(code);
 
         if (Objects.nonNull(result) && WxErrorCode.isSuccessful(result.getErrcode())) {
 
-            //todo
         } else {
 
         }

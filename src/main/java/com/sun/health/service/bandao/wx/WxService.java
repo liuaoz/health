@@ -27,7 +27,7 @@ public class WxService extends AbstractService {
     public static final String code2session = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
 
     @Nullable
-    public SessionDto login(String code) {
+    public SessionDto getUserSession(String code) {
 
         String url = MessageFormat.format(code2session, wxPayConfig.getAppid(), wxPayConfig.getAppSecret(), code);
 
