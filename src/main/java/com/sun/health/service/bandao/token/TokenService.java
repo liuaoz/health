@@ -19,4 +19,8 @@ public class TokenService extends AbstractService {
 
         return null;
     }
+
+    public boolean isValidToken(String token){
+        return Boolean.TRUE.equals(redisTemplate.hasKey(token));
+    }
 }
