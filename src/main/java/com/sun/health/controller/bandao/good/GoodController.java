@@ -8,6 +8,7 @@ import com.sun.health.service.bandao.good.GoodService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,14 @@ public class GoodController extends BaseController {
     @Autowired
     private GoodService goodService;
 
+    @GetMapping("/{goodId}")
+    public JsonRet<GoodDto> getGoodInfo(@PathVariable Long goodId) {
+        GoodEntity entity = goodService.getById(goodId);
+        GoodDto dto = new GoodDto();
+        BeanUtils.copyProperties(entity, dto);
+        return JsonRet.success(dto);
+    }
+
     @GetMapping("/list")
     public JsonRet<List<GoodDto>> getGoods() {
         List<GoodEntity> goods = goodService.getGoods();
@@ -32,7 +41,7 @@ public class GoodController extends BaseController {
             return dto;
         }).collect(Collectors.toList());
 
-        list.forEach(t->t.setLogo(imageServer+t.getLogo()));
+        list.forEach(t -> t.setLogo(imageServer + t.getLogo()));
 
         return JsonRet.success(list);
     }

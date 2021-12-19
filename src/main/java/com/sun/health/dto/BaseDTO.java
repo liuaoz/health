@@ -8,4 +8,14 @@ import java.io.Serializable;
  * @since : 2021/8/22
  **/
 public abstract class BaseDTO implements Serializable {
+
+    protected Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -1,4 +1,4 @@
-package com.sun.health.dto.bandao;
+package com.sun.health.dto.bandao.cart;
 
 import com.sun.health.dto.BaseDTO;
 
