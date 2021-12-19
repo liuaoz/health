@@ -26,7 +26,7 @@ public class OrderService extends AbstractService {
     /**
      * 用户订单列表
      */
-    public List<OrderMasterEntity> getOrders(Long userId) {
+    public List<OrderMasterEntity> getOrderList(Long userId) {
         return orderMasterRepository.findByUserId(userId);
     }
 

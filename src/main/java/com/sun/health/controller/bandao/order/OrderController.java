@@ -7,6 +7,8 @@ import com.sun.health.service.bandao.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/order")
 public class OrderController extends BaseController {
@@ -14,14 +16,21 @@ public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
 
+    @GetMapping("/list")
+    public JsonRet<List<OrderDto>> getOrderList() {
+        Long userId = 1L;
+        orderService.getOrderList(userId);
+        return JsonRet.success();
+    }
+
     @PostMapping
-    public JsonRet<String> createOrder(@RequestBody OrderDto dto){
+    public JsonRet<String> createOrder(@RequestBody OrderDto dto) {
 
         return JsonRet.success();
     }
 
     @PostMapping("/prepay/{orderId}")
-    public JsonRet<String> prepay(@PathVariable Long orderId){
+    public JsonRet<String> prepay(@PathVariable Long orderId) {
         orderService.prePay(orderId);
         return JsonRet.success("todo");
     }
