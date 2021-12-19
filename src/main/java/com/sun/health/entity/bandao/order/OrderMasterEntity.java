@@ -33,7 +33,7 @@ public class OrderMasterEntity extends BaseEntity {
     /**
      * 用户(下单人)
      */
-    private String userCode;
+    private Long userId;
 
     /**
      * 下单时间
@@ -117,12 +117,12 @@ public class OrderMasterEntity extends BaseEntity {
         this.goodQuantity = goodQuantity;
     }
 
-    public String getUserCode() {
-        return userCode;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserCode(String userCode) {
-        this.userCode = userCode;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Date getOrderTime() {

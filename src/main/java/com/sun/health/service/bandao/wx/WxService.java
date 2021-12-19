@@ -14,7 +14,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.DateFormat;
 import java.text.MessageFormat;
 
 @Service
@@ -26,6 +25,9 @@ public class WxService extends AbstractService {
 
     public static final String code2session = "https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code";
 
+    /**
+     * 根据code获取session
+     */
     @Nullable
     public SessionDto getUserSession(String code) {
 

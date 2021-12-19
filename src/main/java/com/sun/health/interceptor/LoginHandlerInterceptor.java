@@ -1,5 +1,8 @@
 package com.sun.health.interceptor;
 
+import com.sun.health.config.bandao.ErrorCode;
+import com.sun.health.core.comm.JsonRet;
+import com.sun.health.core.util.JsonUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.service.bandao.token.TokenService;
 import org.slf4j.Logger;
@@ -26,6 +29,9 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
 
         if (StringUtil.isEmpty(token) || !tokenService.isValidToken(token)) {
             logger.error("invalid token: " + token);
+            JsonRet<String> ret = new JsonRet<>(ErrorCode.INVALID_TOKEN.getErrCode(), ErrorCode.INVALID_TOKEN.getErrMsg());
+            response.setContentType("application/json");
+            response.getWriter().write(JsonUtil.toJson(ret));
             return false;
         }
         return true;

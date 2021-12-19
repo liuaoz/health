@@ -23,6 +23,11 @@ public class JsonRet<T> implements Serializable {
     public JsonRet() {
     }
 
+    public JsonRet(int code, String msg){
+        this.code = code;
+        this.msg = msg;
+    }
+
     public JsonRet(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
