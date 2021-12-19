@@ -1,8 +1,10 @@
 package com.sun.health.controller.bandao.cart;
 
 import com.sun.health.controller.BaseController;
+import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.dto.bandao.cart.CartDto;
+import com.sun.health.entity.bandao.user.UserEntity;
 import com.sun.health.service.bandao.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +20,9 @@ public class CartController extends BaseController {
      * 添加到购物车
      */
     @PostMapping
-    public JsonRet<Boolean> addToCart(@RequestBody CartDto dto) {
+    public JsonRet<Boolean> addToCart(@RequestBody CartDto dto, @CurrentUser UserEntity userEntity) {
 
+        dto.setUserId(userEntity.getId());
         cartService.save(dto);
 
         return JsonRet.success(Boolean.TRUE);
