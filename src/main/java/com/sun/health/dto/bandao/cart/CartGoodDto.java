@@ -1,18 +1,18 @@
 package com.sun.health.dto.bandao.cart;
 
-import com.sun.health.dto.BaseDTO;
+import com.sun.health.dto.bandao.good.GoodDto;
 
-public class CartDto extends BaseDTO {
+public class CartGoodDto {
 
     private Long id;
 
     private Long userId;
 
-    private Long goodId;
-
     private Integer quantity;
 
-    private boolean selected;
+    private Boolean selected;
+
+    private GoodDto good;
 
     public Long getId() {
         return id;
@@ -30,14 +30,6 @@ public class CartDto extends BaseDTO {
         this.userId = userId;
     }
 
-    public Long getGoodId() {
-        return goodId;
-    }
-
-    public void setGoodId(Long goodId) {
-        this.goodId = goodId;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -46,11 +38,19 @@ public class CartDto extends BaseDTO {
         this.quantity = quantity;
     }
 
-    public boolean isSelected() {
+    public Boolean getSelected() {
         return selected;
     }
 
-    public void setSelected(boolean selected) {
+    public void setSelected(Boolean selected) {
         this.selected = selected;
+    }
+
+    public GoodDto getGood() {
+        return good;
+    }
+
+    public void setGood(GoodDto good) {
+        this.good = good;
     }
 }

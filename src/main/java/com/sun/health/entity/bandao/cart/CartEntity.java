@@ -30,6 +30,11 @@ public class CartEntity extends BaseEntity {
      */
     private Date addTime;
 
+    /**
+     * 选中
+     */
+    private boolean selected;
+
     public Long getUserId() {
         return userId;
     }
@@ -60,5 +65,13 @@ public class CartEntity extends BaseEntity {
 
     public void setAddTime(Date addTime) {
         this.addTime = addTime;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

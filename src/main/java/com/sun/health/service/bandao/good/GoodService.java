@@ -22,10 +22,20 @@ public class GoodService extends AbstractService {
     }
 
     /**
+     * 商品列表
+     *
+     * @param goodIds 商品id列表
+     */
+    public List<GoodEntity> getByIds(List<Long> goodIds) {
+        return goodRepository.findAllById(goodIds);
+    }
+
+    /**
      * 商品详情
      */
     public GoodEntity getById(Long goodId) {
         return goodRepository.getById(goodId);
     }
+
 
 }

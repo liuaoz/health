@@ -1,5 +1,6 @@
 package com.sun.health.controller.bandao.good;
 
+import com.sun.health.comm.Const;
 import com.sun.health.controller.BaseController;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.dto.bandao.good.GoodDto;
@@ -18,8 +19,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/good")
 public class GoodController extends BaseController {
-
-    public static final String imageServer = "http://127.0.0.1:8080/health/image/";
 
     @Autowired
     private GoodService goodService;
@@ -41,7 +40,7 @@ public class GoodController extends BaseController {
             return dto;
         }).collect(Collectors.toList());
 
-        list.forEach(t -> t.setLogo(imageServer + t.getLogo()));
+        list.forEach(t -> t.setLogo(Const.imageServer + t.getLogo()));
 
         return JsonRet.success(list);
     }
