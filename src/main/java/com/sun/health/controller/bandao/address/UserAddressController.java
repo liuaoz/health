@@ -25,7 +25,8 @@ public class UserAddressController extends BaseController {
      * 保存
      */
     @PostMapping
-    public JsonRet<Boolean> save(@RequestBody UserAddressDto addressDto) {
+    public JsonRet<Boolean> save(@RequestBody UserAddressDto addressDto, @CurrentUser UserEntity user) {
+        addressDto.setUserId(user.getId());
         return JsonRet.success(userAddressService.save(addressDto));
     }
 
