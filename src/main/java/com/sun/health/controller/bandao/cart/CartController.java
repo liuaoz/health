@@ -20,6 +20,11 @@ public class CartController extends BaseController {
     @Autowired
     private CartService cartService;
 
+    @PutMapping("/selectAll/{selectAll}")
+    public JsonRet<Boolean> selectHandle(@CurrentUser UserEntity user, @PathVariable boolean selectAll) {
+        cartService.handleSelectAll(selectAll, user.getId());
+        return JsonRet.success(Boolean.TRUE);
+    }
 
     /**
      * 添加到购物车
@@ -32,9 +37,11 @@ public class CartController extends BaseController {
         return JsonRet.success(Boolean.TRUE);
     }
 
+    /**
+     * 更新
+     */
     @PutMapping
     public JsonRet<Boolean> updateCart(@RequestBody CartDto dto, @CurrentUser UserEntity user) {
-
         dto.setUserId(user.getId());
         cartService.save(dto);
         return JsonRet.success(Boolean.TRUE);

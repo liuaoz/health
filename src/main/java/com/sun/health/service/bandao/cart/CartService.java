@@ -76,19 +76,39 @@ public class CartService extends AbstractService {
     }
 
     /**
+     * 新加入购物车
+     */
+    public void add(CartDto dto) {
+        CartEntity cartEntity = new CartEntity();
+        BeanUtils.copyProperties(dto, cartEntity);
+        cartEntity.setAddTime(new Date());
+        cartRepository.save(cartEntity);
+    }
+
+    /**
+     * 更新购物车
+     */
+    public void update(CartDto dto) {
+        CartEntity cartEntity = this.getByUserIdAndGoodId(dto.getUserId(), dto.getGoodId());
+        BeanUtils.copyProperties(dto, cartEntity);
+        cartRepository.save(cartEntity);
+    }
+
+    /**
      * 保存
      */
     public void save(CartDto dto) {
-        CartEntity cartEntity = this.getByUserIdAndGoodId(dto.getUserId(), dto.getGoodId());
-        if (Objects.nonNull(cartEntity)) {
-            cartEntity.setQuantity(cartEntity.getQuantity() + dto.getQuantity());
+        if (Objects.isNull(dto.getId())) {
+            add(dto);
         } else {
-            cartEntity = new CartEntity();
-            BeanUtils.copyProperties(dto, cartEntity);
+            update(dto);
         }
-        if (Objects.isNull(cartEntity.getId())) {
-            cartEntity.setAddTime(new Date());
-        }
-        cartRepository.save(cartEntity);
+    }
+
+    /**
+     * 处理全选/反选
+     */
+    public void handleSelectAll(boolean selectAll, Long userId) {
+        cartRepository.updateSelected(selectAll, userId);
     }
 }
