@@ -21,6 +21,14 @@ public class UserAddressController extends BaseController {
     @Autowired
     private UserAddressService userAddressService;
 
+    @GetMapping("/{id}")
+    public JsonRet<UserAddressDto> getDetail(@PathVariable Long id){
+        UserAddressEntity addressEntity = userAddressService.findById(id);
+        UserAddressDto dto = new UserAddressDto();
+        BeanUtils.copyProperties(addressEntity,dto);
+        return JsonRet.success(dto);
+    }
+
     /**
      * 保存
      */

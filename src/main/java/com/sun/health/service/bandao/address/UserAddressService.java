@@ -16,6 +16,10 @@ public class UserAddressService extends AbstractService {
     @Autowired
     private UserAddressRepository userAddressRepository;
 
+    public UserAddressEntity findById(Long id){
+        return userAddressRepository.getById(id);
+    }
+
     /**
      * 保存地址，新增或修改
      */
