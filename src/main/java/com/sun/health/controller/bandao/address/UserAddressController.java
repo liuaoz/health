@@ -9,6 +9,7 @@ import com.sun.health.entity.bandao.user.UserEntity;
 import com.sun.health.service.bandao.address.UserAddressService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,11 +22,30 @@ public class UserAddressController extends BaseController {
     @Autowired
     private UserAddressService userAddressService;
 
+    /**
+     * 默认地址
+     */
+    @GetMapping("/default")
+    public JsonRet<UserAddressDto> getDefaultAddress(@CurrentUser UserEntity user) {
+//        UserAddressEntity addressEntity = userAddressService.getDefaultAddress(user.getId());
+//        UserAddressDto dto = new UserAddressDto();
+//        BeanUtils.copyProperties(addressEntity, dto);
+//        return JsonRet.success(dto);
+        List<UserAddressDto> list = list(user).getData();
+        if (CollectionUtils.isEmpty(list)) {
+            return JsonRet.success();
+        }
+        return JsonRet.success(list.get(0));
+    }
+
+    /**
+     * 详情
+     */
     @GetMapping("/{id}")
-    public JsonRet<UserAddressDto> getDetail(@PathVariable Long id){
+    public JsonRet<UserAddressDto> getDetail(@PathVariable Long id) {
         UserAddressEntity addressEntity = userAddressService.findById(id);
         UserAddressDto dto = new UserAddressDto();
-        BeanUtils.copyProperties(addressEntity,dto);
+        BeanUtils.copyProperties(addressEntity, dto);
         return JsonRet.success(dto);
     }
 
