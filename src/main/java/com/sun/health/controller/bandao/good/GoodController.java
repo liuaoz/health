@@ -8,10 +8,8 @@ import com.sun.health.entity.bandao.good.GoodEntity;
 import com.sun.health.service.bandao.good.GoodService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,5 +41,15 @@ public class GoodController extends BaseController {
         list.forEach(t -> t.setLogo(Const.imageServer + t.getLogo()));
 
         return JsonRet.success(list);
+    }
+
+
+    // 后端接口
+    @PostMapping("/image/upload")
+    public JsonRet<Boolean> uploadGoodImage(@RequestParam("file") MultipartFile file, @RequestParam("goodId") Long goodId) {
+
+        logger.info(file.getOriginalFilename());
+        logger.info("--->" + goodId);
+        return JsonRet.success();
     }
 }

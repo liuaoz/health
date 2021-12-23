@@ -15,6 +15,11 @@ public class GoodImageEntity extends BaseEntity {
     private Long goodId;
 
     /**
+     * 文件名称
+     */
+    private String fileName;
+
+    /**
      * 图片地址
      */
     private String link;
@@ -29,12 +34,25 @@ public class GoodImageEntity extends BaseEntity {
      */
     private String type;
 
+    /**
+     * 内容
+     */
+    private byte[] content;
+
     public Long getGoodId() {
         return goodId;
     }
 
     public void setGoodId(Long goodId) {
         this.goodId = goodId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getLink() {
@@ -59,5 +77,13 @@ public class GoodImageEntity extends BaseEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }
