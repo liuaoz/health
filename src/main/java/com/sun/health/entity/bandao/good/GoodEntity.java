@@ -27,7 +27,7 @@ public class GoodEntity extends BaseEntity {
     /**
      * 库存数量
      */
-    private int stock;
+    private int quantity;
 
     /**
      * 简介
@@ -73,12 +73,12 @@ public class GoodEntity extends BaseEntity {
         this.saleable = saleable;
     }
 
-    public int getStock() {
-        return stock;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public String getOutline() {

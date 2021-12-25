@@ -19,7 +19,7 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     @GetMapping("/list")
-    public JsonRet<List<OrderMasterDto>> getOrderList() {
+    public JsonRet<List<OrderMasterDto>> getOrderList(@CurrentUser UserEntity user) {
         Long userId = 1L;
         orderService.getOrderList(userId);
         return JsonRet.success();

@@ -3,6 +3,7 @@ package com.sun.health.service.bandao.order;
 import com.sun.health.comm.OrderStatus;
 import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.StringUtil;
+import com.sun.health.dto.bandao.order.OrderMasterDto;
 import com.sun.health.entity.bandao.address.UserAddressEntity;
 import com.sun.health.entity.bandao.cart.CartEntity;
 import com.sun.health.entity.bandao.good.GoodEntity;
@@ -44,6 +45,14 @@ public class OrderService extends AbstractService {
 
     @Autowired
     private GoodService goodService;
+
+
+    public List<OrderMasterDto> getOrderListWithGoods(Long userId) {
+
+        List<OrderMasterEntity> orderMasterEntities = orderMasterRepository.findByUserId(userId);
+
+        return null;
+    }
 
     /**
      * 用户订单列表
