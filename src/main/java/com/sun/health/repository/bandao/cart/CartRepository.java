@@ -14,10 +14,15 @@ public interface CartRepository extends JpaRepository<CartEntity, Long> {
 
     List<CartEntity> findByUserId(Long userId);
 
+    List<CartEntity> findByUserIdAndSelected(Long userId, boolean selected);
+
     CartEntity findByUserIdAndGoodId(Long userId, Long goodId);
 
     @Transactional
     @Modifying()
     @Query(value = "update tb_cart set selected = ?1 where user_id = ?2",nativeQuery = true)
     void updateSelected(boolean selected, Long userId);
+
+    @Transactional
+    void deleteByUserIdAndSelected(Long userId, boolean selected);
 }

@@ -63,4 +63,12 @@ public final class StringUtil {
     public static String rand32Str() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 32);
     }
+
+    /**
+     * 202112250610
+     * @return
+     */
+    public static String dateTimeString(){
+        return null;
+    }
 }

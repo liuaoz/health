@@ -26,6 +26,21 @@ public class CartService extends AbstractService {
     @Autowired
     private GoodService goodService;
 
+    /**
+     * 生成订单后，删除购物车中的选中商品
+     */
+    public boolean removeSelectedCart(Long userId) {
+        cartRepository.deleteByUserIdAndSelected(userId, true);
+        return true;
+    }
+
+    /**
+     * 获取选中的商品
+     */
+    public List<CartEntity> getSelectedCart(Long userId) {
+        return cartRepository.findByUserIdAndSelected(userId, true);
+    }
+
 
     @NonNull
     public List<CartGoodDto> getCartList(Long userId) {

@@ -1,8 +1,10 @@
 package com.sun.health.controller.bandao.order;
 
 import com.sun.health.controller.BaseController;
+import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.dto.bandao.order.OrderMasterDto;
+import com.sun.health.entity.bandao.user.UserEntity;
 import com.sun.health.service.bandao.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,9 @@ public class OrderController extends BaseController {
         return JsonRet.success();
     }
 
-    @PostMapping
-    public JsonRet<String> createOrder(@RequestBody OrderMasterDto dto) {
-
+    @PostMapping("/submit/{addressId}")
+    public JsonRet<String> submitOrder(@CurrentUser UserEntity user, @PathVariable Long addressId) {
+        orderService.submitOrder(user.getId(), addressId);
         return JsonRet.success();
     }
 

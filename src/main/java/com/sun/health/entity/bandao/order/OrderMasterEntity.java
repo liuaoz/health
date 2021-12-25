@@ -58,7 +58,7 @@ public class OrderMasterEntity extends BaseEntity {
     /**
      * 收件人名称
      */
-    private String receiverName;
+    private String recipient;
 
     /**
      * 收件人电话
@@ -157,12 +157,12 @@ public class OrderMasterEntity extends BaseEntity {
         this.receiveTime = receiveTime;
     }
 
-    public String getReceiverName() {
-        return receiverName;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
     public String getPhone() {
