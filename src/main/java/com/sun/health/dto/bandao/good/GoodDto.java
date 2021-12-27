@@ -12,6 +12,8 @@ public class GoodDto extends BaseDTO {
 
     private int stock;
 
+    private int quantity;
+
     private String outline;
 
     private String intro;
@@ -66,6 +68,14 @@ public class GoodDto extends BaseDTO {
 
     public void setIntro(String intro) {
         this.intro = intro;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public int getPrice() {

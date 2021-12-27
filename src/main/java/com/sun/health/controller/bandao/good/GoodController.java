@@ -2,9 +2,12 @@ package com.sun.health.controller.bandao.good;
 
 import com.sun.health.comm.Const;
 import com.sun.health.controller.BaseController;
+import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.dto.bandao.good.GoodDto;
 import com.sun.health.entity.bandao.good.GoodEntity;
+import com.sun.health.entity.bandao.user.UserEntity;
+import com.sun.health.service.bandao.cart.CartService;
 import com.sun.health.service.bandao.good.GoodService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,20 @@ public class GoodController extends BaseController {
 
     @Autowired
     private GoodService goodService;
+
+    @Autowired
+    private CartService cartService;
+
+    @GetMapping("/selected")
+    public JsonRet<List<GoodDto>> getSelectedGoods(@CurrentUser UserEntity user) {
+        List<GoodEntity> goodEntities = goodService.getSelectedGoods(user.getId());
+        List<GoodDto> goodDtoList = goodEntities.stream().map(entity -> {
+            GoodDto dto = new GoodDto();
+            BeanUtils.copyProperties(entity, dto);
+            return dto;
+        }).collect(Collectors.toList());
+        return JsonRet.success(goodDtoList);
+    }
 
     @GetMapping("/{goodId}")
     public JsonRet<GoodDto> getGoodInfo(@PathVariable Long goodId) {

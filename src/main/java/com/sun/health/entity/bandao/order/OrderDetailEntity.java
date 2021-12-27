@@ -25,6 +25,11 @@ public class OrderDetailEntity extends BaseEntity {
     private String goodName;
 
     /**
+     * 商品logo
+     */
+    private String logo;
+
+    /**
      * 购买数量
      */
     private int quantity;
@@ -72,5 +77,13 @@ public class OrderDetailEntity extends BaseEntity {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }

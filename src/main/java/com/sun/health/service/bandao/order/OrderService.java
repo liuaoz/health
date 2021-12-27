@@ -1,8 +1,10 @@
 package com.sun.health.service.bandao.order;
 
+import com.sun.health.comm.Const;
 import com.sun.health.comm.OrderStatus;
 import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.StringUtil;
+import com.sun.health.dto.bandao.order.OrderDetailDto;
 import com.sun.health.dto.bandao.order.OrderMasterDto;
 import com.sun.health.entity.bandao.address.UserAddressEntity;
 import com.sun.health.entity.bandao.cart.CartEntity;
@@ -16,6 +18,7 @@ import com.sun.health.service.bandao.WxPayService;
 import com.sun.health.service.bandao.address.UserAddressService;
 import com.sun.health.service.bandao.cart.CartService;
 import com.sun.health.service.bandao.good.GoodService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,11 +50,33 @@ public class OrderService extends AbstractService {
     private GoodService goodService;
 
 
+    /**
+     * 订单列表，包含商品信息
+     */
     public List<OrderMasterDto> getOrderListWithGoods(Long userId) {
 
         List<OrderMasterEntity> orderMasterEntities = orderMasterRepository.findByUserId(userId);
 
-        return null;
+        List<OrderMasterDto> orderMasterDtos = new ArrayList<>();
+
+        orderMasterEntities.forEach(master -> {
+
+            OrderMasterDto orderMasterDto = new OrderMasterDto();
+            List<OrderDetailEntity> orderDetailList = getOrderDetailList(master.getId());
+
+            BeanUtils.copyProperties(master, orderMasterDto);
+
+            List<OrderDetailDto> orderDetailDtos = orderDetailList.stream().map(t -> {
+                OrderDetailDto orderDetailDto = new OrderDetailDto();
+                BeanUtils.copyProperties(t, orderDetailDto);
+                return orderDetailDto;
+            }).collect(Collectors.toList());
+
+            orderMasterDto.setGoods(orderDetailDtos);
+            orderMasterDtos.add(orderMasterDto);
+        });
+
+        return orderMasterDtos;
     }
 
     /**
@@ -59,6 +84,10 @@ public class OrderService extends AbstractService {
      */
     public List<OrderMasterEntity> getOrderList(Long userId) {
         return orderMasterRepository.findByUserId(userId);
+    }
+
+    public List<OrderDetailEntity> getOrderDetailList(Long orderId) {
+        return orderDetailRepository.findByOrderId(orderId);
     }
 
     /**
@@ -123,6 +152,7 @@ public class OrderService extends AbstractService {
             GoodEntity goodEntity = idGoodMap.get(cart.getGoodId());
             orderDetailEntity.setGoodName(goodEntity.getName());
             orderDetailEntity.setPrice(goodEntity.getPrice());
+            orderDetailEntity.setLogo(goodEntity.getLogo());
             orderDetailEntities.add(orderDetailEntity);
         });
         orderDetailRepository.saveAll(orderDetailEntities);

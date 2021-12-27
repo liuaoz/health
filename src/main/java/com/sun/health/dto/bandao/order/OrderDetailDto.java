@@ -29,6 +29,11 @@ public class OrderDetailDto extends BaseDTO {
      */
     private int price;
 
+    /**
+     * 商品logo
+     */
+    private String logo;
+
     public Long getOrderId() {
         return orderId;
     }
@@ -67,5 +72,13 @@ public class OrderDetailDto extends BaseDTO {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 }
