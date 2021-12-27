@@ -41,7 +41,6 @@ public class CartService extends AbstractService {
         return cartRepository.findByUserIdAndSelected(userId, true);
     }
 
-
     @NonNull
     public List<CartGoodDto> getCartList(Long userId) {
 
@@ -66,6 +65,24 @@ public class CartService extends AbstractService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    /**
+     * 添加到购物车
+     */
+    public void addToCart(CartDto dto, Long userId) {
+
+        CartEntity cartEntity = getByUserIdAndGoodId(userId, dto.getGoodId());
+        //若不存在，创建
+        if (Objects.isNull(cartEntity)) {
+            cartEntity = new CartEntity();
+            BeanUtils.copyProperties(dto, cartEntity);
+
+        } else {
+            //存在,更新数量
+            cartEntity.setQuantity(cartEntity.getQuantity() + dto.getQuantity());
+        }
+        cartRepository.save(cartEntity);
     }
 
 
@@ -103,21 +120,10 @@ public class CartService extends AbstractService {
     /**
      * 更新购物车
      */
-    public void update(CartDto dto) {
-        CartEntity cartEntity = this.getByUserIdAndGoodId(dto.getUserId(), dto.getGoodId());
-        BeanUtils.copyProperties(dto, cartEntity);
+    public void update(CartDto dto, Long userId) {
+        CartEntity cartEntity = this.getByUserIdAndGoodId(userId, dto.getGoodId());
+        cartEntity.setQuantity(dto.getQuantity());
         cartRepository.save(cartEntity);
-    }
-
-    /**
-     * 保存
-     */
-    public void save(CartDto dto) {
-        if (Objects.isNull(dto.getId())) {
-            add(dto);
-        } else {
-            update(dto);
-        }
     }
 
     /**

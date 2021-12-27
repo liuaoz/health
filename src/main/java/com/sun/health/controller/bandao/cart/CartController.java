@@ -6,6 +6,7 @@ import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.dto.bandao.cart.CartDto;
 import com.sun.health.dto.bandao.cart.CartGoodDto;
+import com.sun.health.dto.bandao.good.GoodDto;
 import com.sun.health.entity.bandao.user.UserEntity;
 import com.sun.health.service.bandao.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,7 @@ public class CartController extends BaseController {
     @PostMapping
     public JsonRet<Boolean> addToCart(@RequestBody CartDto dto, @CurrentUser UserEntity user) {
 
-        dto.setUserId(user.getId());
-        cartService.save(dto);
+        cartService.addToCart(dto, user.getId());
         return JsonRet.success(Boolean.TRUE);
     }
 
@@ -43,7 +43,7 @@ public class CartController extends BaseController {
     @PutMapping
     public JsonRet<Boolean> updateCart(@RequestBody CartDto dto, @CurrentUser UserEntity user) {
         dto.setUserId(user.getId());
-        cartService.save(dto);
+        cartService.update(dto, user.getId());
         return JsonRet.success(Boolean.TRUE);
     }
 
@@ -54,7 +54,10 @@ public class CartController extends BaseController {
     @GetMapping("/list")
     public JsonRet<List<CartGoodDto>> getCartList(@CurrentUser UserEntity user) {
         List<CartGoodDto> cartList = cartService.getCartList(user.getId());
-        cartList.forEach(t -> t.getGood().setLogo(Const.imageServer + t.getGood().getLogo()));
+        cartList.forEach(t -> {
+            GoodDto good = t.getGood();
+            good.setLogo(Const.imageServer + good.getLogo());
+        });
         return JsonRet.success(cartList);
     }
 }
