@@ -124,6 +124,7 @@ public class CartService extends AbstractService {
     public void update(CartDto dto, Long userId) {
         CartEntity cartEntity = this.getByUserIdAndGoodId(userId, dto.getGoodId());
         cartEntity.setQuantity(dto.getQuantity());
+        cartEntity.setSelected(dto.isSelected());
         cartRepository.save(cartEntity);
     }
 

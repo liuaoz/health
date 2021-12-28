@@ -6,6 +6,7 @@ import com.sun.health.core.util.StringUtil;
 import com.sun.health.core.util.XmlUtil;
 import com.sun.health.dto.bandao.pay.PayOrderDto;
 import com.sun.health.dto.bandao.pay.UnifiedOrderRespDto;
+import com.sun.health.entity.bandao.order.OrderMasterEntity;
 import com.sun.health.service.AbstractService;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
@@ -50,8 +51,10 @@ public class WxPayService extends AbstractService {
     /**
      * 统一下单
      */
-    public boolean unifiedOrder() {
-        String body = assembleBody();
+    public UnifiedOrderRespDto unifiedOrder(OrderMasterEntity masterEntity) {
+
+        UnifiedOrderRespDto respDto;
+        String body = assembleBody(masterEntity);
 
         HttpClient client = HttpClient.newBuilder().build();
 
@@ -66,25 +69,25 @@ public class WxPayService extends AbstractService {
             int statusCode = response.statusCode();
             if (HttpStatus.valueOf(statusCode).is2xxSuccessful()) {
                 logger.info("unified order response: {}", response.body());
-                UnifiedOrderRespDto respDto = XmlUtil.convertXmlStrToObject(UnifiedOrderRespDto.class, response.body());
+                respDto = XmlUtil.convertXmlStrToObject(UnifiedOrderRespDto.class, response.body());
             } else {
                 logger.error("unified order response code:" + statusCode);
-                return false;
+                return null;
             }
         } catch (IOException | InterruptedException e) {
             logger.error("unified order error.", e);
-            return false;
+            return null;
         }
-        return true;
+        return respDto;
     }
 
-    private String assembleBody() {
+    private String assembleBody(OrderMasterEntity masterEntity) {
 
-        String goodDesc = "紫菜";
-        int totalFee = 10;
+        String goodDesc = "海鲜";
+        int totalFee = masterEntity.getTotalFee();
         String tradeType = "JSAPI";
-        String nonceStr = StringUtil.rand32Str();
-        String outTradeNo = StringUtil.rand32Str();
+        String nonceStr = masterEntity.getOrderNo();
+        String outTradeNo =masterEntity.getOrderNo();
 
         String temp = String.join("&",
                 "appid=" + wxPayConfig.getAppid(),

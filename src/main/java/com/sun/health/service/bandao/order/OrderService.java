@@ -6,6 +6,8 @@ import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.dto.bandao.order.OrderDetailDto;
 import com.sun.health.dto.bandao.order.OrderMasterDto;
+import com.sun.health.dto.bandao.order.PrePayDto;
+import com.sun.health.dto.bandao.pay.UnifiedOrderRespDto;
 import com.sun.health.entity.bandao.address.UserAddressEntity;
 import com.sun.health.entity.bandao.cart.CartEntity;
 import com.sun.health.entity.bandao.good.GoodEntity;
@@ -20,12 +22,10 @@ import com.sun.health.service.bandao.cart.CartService;
 import com.sun.health.service.bandao.good.GoodService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +48,13 @@ public class OrderService extends AbstractService {
 
     @Autowired
     private GoodService goodService;
+
+    /**
+     *
+     */
+    public OrderMasterEntity findById(Long id) {
+        return orderMasterRepository.getById(id);
+    }
 
 
     /**
@@ -93,9 +100,10 @@ public class OrderService extends AbstractService {
     /**
      * 去支付时，到wx生成预定单，返回prepare_id
      */
-    public void prePay(Long orderId) {
-
-        wxPayService.unifiedOrder();
+    @Nullable
+    public UnifiedOrderRespDto prePay(Long orderId) {
+        OrderMasterEntity masterEntity = findById(orderId);
+        return wxPayService.unifiedOrder(masterEntity);
     }
 
     /**

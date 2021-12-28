@@ -5,6 +5,7 @@ import com.sun.health.controller.BaseController;
 import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.dto.bandao.order.OrderMasterDto;
+import com.sun.health.dto.bandao.pay.UnifiedOrderRespDto;
 import com.sun.health.entity.bandao.user.UserEntity;
 import com.sun.health.service.bandao.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class OrderController extends BaseController {
     }
 
     @PostMapping("/prepay/{orderId}")
-    public JsonRet<String> prepay(@PathVariable Long orderId) {
-        orderService.prePay(orderId);
-        return JsonRet.success("todo");
+    public JsonRet<UnifiedOrderRespDto> prepay(@PathVariable Long orderId) {
+        UnifiedOrderRespDto respDto = orderService.prePay(orderId);
+        return JsonRet.success(respDto);
     }
 }
