@@ -16,7 +16,7 @@ spring:
       path: /health
   redis:
     host: 127.0.0.1
-    database: 0
+    database: 1
 
   data:
     redis:
