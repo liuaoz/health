@@ -11,6 +11,7 @@
     <groupId>com.sun</groupId>
     <artifactId>health</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>health</name>
     <description>health project from sun</description>
     <properties>
@@ -77,6 +78,7 @@
     </dependencies>
 
     <build>
+        <finalName>health</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
