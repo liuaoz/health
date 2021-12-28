@@ -114,12 +114,16 @@ public class OrderService extends AbstractService {
         respDto.setTime_stamp(String.valueOf(now.getTime() / 1000));
         respDto.setSign_type("MD5");
 
-        String source = "appid=" + wxPayConfig.getAppid()
+        String source = "appId=" + wxPayConfig.getAppid()
                 + "&nonceStr=" + respDto.getNonce_str()
                 + "&package=prepay_id=" + respDto.getPrepay_id()
                 + "&signType=" + respDto.getSign_type()
+                + "&timeStamp=" + respDto.getTime_stamp()
                 + "&key=" + wxPayConfig.getKey();
+
+        logger.info("plain-->"+source);
         String paySign = SafeUtil.md5(source).toUpperCase();
+        logger.info("sign-->"+ paySign);
         respDto.setPay_sign(paySign);
         return respDto;
     }
