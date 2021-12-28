@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cart")
@@ -59,5 +60,15 @@ public class CartController extends BaseController {
             good.setLogo(Const.imageServer + good.getLogo());
         });
         return JsonRet.success(cartList);
+    }
+
+    /**
+     * 获取购物车中选中的商品列表
+     */
+    @GetMapping("/selected/list")
+    public JsonRet<List<CartGoodDto>> getSelectedList(@CurrentUser UserEntity user) {
+        List<CartGoodDto> selectedCarts = getCartList(user).getData().stream()
+                .filter(CartGoodDto::getSelected).collect(Collectors.toList());
+        return JsonRet.success(selectedCarts);
     }
 }

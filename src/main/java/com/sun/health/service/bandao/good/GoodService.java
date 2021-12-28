@@ -21,17 +21,6 @@ public class GoodService extends AbstractService {
     private CartService cartService;
 
     /**
-     * 去结算时，获取选中的商品列表
-     */
-    public List<GoodEntity> getSelectedGoods(Long userId) {
-        List<CartEntity> selectedCart = cartService.getSelectedCart(userId);
-
-        List<Long> goodIds = selectedCart.stream().map(CartEntity::getGoodId).collect(Collectors.toList());
-
-        return getByIds(goodIds);
-    }
-
-    /**
      * 商品列表
      */
     public List<GoodEntity> getGoods() {

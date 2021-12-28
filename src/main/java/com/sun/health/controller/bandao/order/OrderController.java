@@ -27,9 +27,9 @@ public class OrderController extends BaseController {
     }
 
     @PostMapping("/submit/{addressId}")
-    public JsonRet<String> submitOrder(@CurrentUser UserEntity user, @PathVariable Long addressId) {
+    public JsonRet<Boolean> submitOrder(@CurrentUser UserEntity user, @PathVariable Long addressId) {
         orderService.submitOrder(user.getId(), addressId);
-        return JsonRet.success();
+        return JsonRet.success(Boolean.TRUE);
     }
 
     @PostMapping("/prepay/{orderId}")

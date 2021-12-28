@@ -77,6 +77,7 @@ public class CartService extends AbstractService {
         if (Objects.isNull(cartEntity)) {
             cartEntity = new CartEntity();
             BeanUtils.copyProperties(dto, cartEntity);
+            cartEntity.setUserId(userId);
 
         } else {
             //存在,更新数量

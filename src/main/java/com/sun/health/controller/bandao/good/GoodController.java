@@ -27,17 +27,6 @@ public class GoodController extends BaseController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/selected")
-    public JsonRet<List<GoodDto>> getSelectedGoods(@CurrentUser UserEntity user) {
-        List<GoodEntity> goodEntities = goodService.getSelectedGoods(user.getId());
-        List<GoodDto> goodDtoList = goodEntities.stream().map(entity -> {
-            GoodDto dto = new GoodDto();
-            BeanUtils.copyProperties(entity, dto);
-            return dto;
-        }).collect(Collectors.toList());
-        return JsonRet.success(goodDtoList);
-    }
-
     @GetMapping("/{goodId}")
     public JsonRet<GoodDto> getGoodInfo(@PathVariable Long goodId) {
         GoodEntity entity = goodService.getById(goodId);
