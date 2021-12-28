@@ -2,11 +2,14 @@ package com.sun.health.service.bandao.order;
 
 import com.sun.health.comm.Const;
 import com.sun.health.comm.OrderStatus;
+import com.sun.health.config.WxPayConfig;
 import com.sun.health.core.util.DateUtil;
+import com.sun.health.core.util.SafeUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.dto.bandao.order.OrderDetailDto;
 import com.sun.health.dto.bandao.order.OrderMasterDto;
 import com.sun.health.dto.bandao.order.PrePayDto;
+import com.sun.health.dto.bandao.pay.PayOrderDto;
 import com.sun.health.dto.bandao.pay.UnifiedOrderRespDto;
 import com.sun.health.entity.bandao.address.UserAddressEntity;
 import com.sun.health.entity.bandao.cart.CartEntity;
@@ -48,6 +51,8 @@ public class OrderService extends AbstractService {
 
     @Autowired
     private GoodService goodService;
+    @Autowired
+    private WxPayConfig wxPayConfig;
 
     /**
      *
@@ -103,7 +108,20 @@ public class OrderService extends AbstractService {
     @Nullable
     public UnifiedOrderRespDto prePay(Long orderId) {
         OrderMasterEntity masterEntity = findById(orderId);
-        return wxPayService.unifiedOrder(masterEntity);
+        UnifiedOrderRespDto respDto = wxPayService.unifiedOrder(masterEntity);
+
+        Date now = new Date();
+        respDto.setTime_stamp(String.valueOf(now.getTime() / 1000));
+        respDto.setSign_type("MD5");
+
+        String source = "appid=" + wxPayConfig.getAppid()
+                + "&nonceStr=" + respDto.getNonce_str()
+                + "&package=prepay_id=" + respDto.getPrepay_id()
+                + "&signType=" + respDto.getSign_type()
+                + "&key=" + wxPayConfig.getKey();
+        String paySign = SafeUtil.md5(source).toUpperCase();
+        respDto.setPay_sign(paySign);
+        return respDto;
     }
 
     /**

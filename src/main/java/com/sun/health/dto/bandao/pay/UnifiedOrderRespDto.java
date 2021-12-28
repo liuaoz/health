@@ -15,6 +15,10 @@ public class UnifiedOrderRespDto {
     private String prepay_id;
     private String trade_type;
 
+    private String time_stamp;
+    private String pay_sign;
+    private String sign_type;
+
     public String getReturn_code() {
         return return_code;
     }
@@ -85,5 +89,29 @@ public class UnifiedOrderRespDto {
 
     public void setTrade_type(String trade_type) {
         this.trade_type = trade_type;
+    }
+
+    public String getTime_stamp() {
+        return time_stamp;
+    }
+
+    public void setTime_stamp(String time_stamp) {
+        this.time_stamp = time_stamp;
+    }
+
+    public String getPay_sign() {
+        return pay_sign;
+    }
+
+    public void setPay_sign(String pay_sign) {
+        this.pay_sign = pay_sign;
+    }
+
+    public String getSign_type() {
+        return sign_type;
+    }
+
+    public void setSign_type(String sign_type) {
+        this.sign_type = sign_type;
     }
 }
