@@ -1,4 +1,4 @@
-FROM java:11
+FROM java:14
 EXPOSE 9000
 VOLUME /tmp
 ADD ./target/health.jar app.jar
