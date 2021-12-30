@@ -1,4 +1,4 @@
-FROM java:14
+FROM openjdk:14
 EXPOSE 9000
 MAINTAINER cxx "576729125@qq.com"
 VOLUME /tmp
