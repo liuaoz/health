@@ -5,9 +5,9 @@ spring:
 #    static-locations: classpath:static/
 
   datasource:
-    username: root
-    password: 11111111
-    url: jdbc:mysql://127.0.0.1:3306/bandao?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:11111111}
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:3306/bandao?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: true
@@ -17,8 +17,8 @@ spring:
     servlet:
       path: /health
   redis:
-    host: 127.0.0.1
-    database: 1
+    host: ${REDIS_HOST:127.0.0.1}
+    database: ${REDIS_DB:1}
 
   data:
     redis:
