@@ -1,5 +1,5 @@
 FROM openjdk:14
-EXPOSE 80
+EXPOSE 8080
 MAINTAINER cxx "576729125@qq.com"
 VOLUME /tmp
 ADD ./target/health.jar app.jar
