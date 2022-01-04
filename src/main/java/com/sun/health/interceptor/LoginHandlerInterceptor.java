@@ -29,9 +29,8 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
 
         if (StringUtil.isEmpty(token) || !tokenService.isValidToken(token)) {
             logger.error("invalid token: " + token);
-            JsonRet<String> ret = new JsonRet<>(ErrorCode.INVALID_TOKEN.getErrCode(), ErrorCode.INVALID_TOKEN.getErrMsg());
             response.setContentType("application/json");
-            response.getWriter().write(JsonUtil.toJson(ret));
+            response.getWriter().write(JsonUtil.toJson(JsonRet.fail()));
             return false;
         }
         return true;
