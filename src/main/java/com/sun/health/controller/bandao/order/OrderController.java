@@ -42,4 +42,13 @@ public class OrderController extends BaseController {
         BeanUtils.copyProperties(respDto, prepayDto);
         return JsonRet.success(prepayDto);
     }
+
+    /**
+     * 支付成功，微信回调
+     */
+    @PostMapping(Const.NOTIFY_URL)
+    public JsonRet<Boolean> confirm() {
+        logger.info("wx pay notify............");
+        return JsonRet.success();
+    }
 }

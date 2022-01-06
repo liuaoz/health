@@ -1,5 +1,6 @@
 package com.sun.health.service.bandao;
 
+import com.sun.health.comm.Const;
 import com.sun.health.config.WxPayConfig;
 import com.sun.health.core.util.SafeUtil;
 import com.sun.health.core.util.StringUtil;
@@ -41,7 +42,7 @@ public class WxPayService extends AbstractService {
 
     private static final String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
     public static final String url_unified_order = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    private static final String notify_url = "https://www.sunoribt.com";
+    private static final String notify_url = "https://www.sunoribt.com/health" + Const.NOTIFY_URL;
     private static final String myOpenid = "owJBV43C3ugI76lqpuFpzWQt7o3c";
     public static final String spbill_create_ip = "183.195.41.221";
 
@@ -87,7 +88,7 @@ public class WxPayService extends AbstractService {
         int totalFee = masterEntity.getTotalFee();
         String tradeType = "JSAPI";
         String nonceStr = masterEntity.getOrderNo();
-        String outTradeNo =masterEntity.getOrderNo();
+        String outTradeNo = masterEntity.getOrderNo();
 
         String temp = String.join("&",
                 "appid=" + wxPayConfig.getAppid(),
