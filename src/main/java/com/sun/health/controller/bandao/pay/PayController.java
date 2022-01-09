@@ -3,12 +3,11 @@ package com.sun.health.controller.bandao.pay;
 import com.sun.health.comm.Const;
 import com.sun.health.controller.BaseController;
 import com.sun.health.core.comm.JsonRet;
+import com.sun.health.core.util.JsonUtil;
+import com.sun.health.dto.bandao.pay.wx.EncryptedRespDto;
 import com.sun.health.service.bandao.WxPayService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pay")
@@ -28,8 +27,8 @@ public class PayController extends BaseController {
      * 支付成功，微信回调
      */
     @PostMapping(Const.NOTIFY_URL)
-    public JsonRet<Boolean> confirm() {
-        logger.info("wx pay notify............");
+    public JsonRet<Boolean> confirm(@RequestBody EncryptedRespDto dto) {
+        logger.info("wx pay notify->{}", JsonUtil.toJson(dto));
         return JsonRet.success();
     }
 
