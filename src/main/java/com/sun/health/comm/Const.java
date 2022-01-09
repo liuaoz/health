@@ -11,5 +11,5 @@ public class Const {
 //    public static final String imageServer = "http://127.0.0.1:8080/health/image/";
     public static final String imageServer = "http://106.14.67.97/health/image/";
 
-    public static final String NOTIFY_URL = "/wx/pay/notify";
+    public static final String NOTIFY_URL = "notify";
 }

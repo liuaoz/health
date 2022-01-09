@@ -43,12 +43,5 @@ public class OrderController extends BaseController {
         return JsonRet.success(prepayDto);
     }
 
-    /**
-     * 支付成功，微信回调
-     */
-    @PostMapping(Const.NOTIFY_URL)
-    public JsonRet<Boolean> confirm() {
-        logger.info("wx pay notify............");
-        return JsonRet.success();
-    }
+
 }
