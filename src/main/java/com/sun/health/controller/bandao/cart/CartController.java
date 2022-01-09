@@ -39,6 +39,15 @@ public class CartController extends BaseController {
     }
 
     /**
+     * 删除
+     */
+    @DeleteMapping("/{id}")
+    public JsonRet<Boolean> delete(@PathVariable Long id) {
+        cartService.delete(id);
+        return JsonRet.success(Boolean.TRUE);
+    }
+
+    /**
      * 更新
      */
     @PutMapping
