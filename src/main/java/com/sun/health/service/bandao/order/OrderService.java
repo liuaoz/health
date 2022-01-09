@@ -121,9 +121,8 @@ public class OrderService extends AbstractService {
                 + "&timeStamp=" + respDto.getTime_stamp()
                 + "&key=" + wxPayConfig.getKey();
 
-        logger.info("plain-->"+source);
+        logger.info("prepay request-->" + source);
         String paySign = SafeUtil.md5(source).toUpperCase();
-        logger.info("sign-->"+ paySign);
         respDto.setPay_sign(paySign);
         return respDto;
     }
