@@ -1,8 +1,11 @@
 package com.sun.health.dto.bandao.pay.wx;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * 支付成功结果通知
  */
+@XmlRootElement(name = "xml")
 public class EncryptedRespDto {
 
     private String id;

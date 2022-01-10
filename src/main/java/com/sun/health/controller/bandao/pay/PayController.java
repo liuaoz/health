@@ -26,7 +26,7 @@ public class PayController extends BaseController {
     /**
      * 支付成功，微信回调
      */
-    @PostMapping(Const.NOTIFY_URL)
+    @PostMapping(value = Const.NOTIFY_URL,consumes = "text/xml")
     public JsonRet<Boolean> confirm(@RequestBody EncryptedRespDto dto) {
         logger.info("wx pay notify->{}", JsonUtil.toJson(dto));
         return JsonRet.success();
