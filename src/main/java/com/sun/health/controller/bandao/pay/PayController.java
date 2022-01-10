@@ -18,6 +18,7 @@ public class PayController extends BaseController {
     @Autowired
     private OrderService orderService;
 
+
     /**
      * 支付成功，微信回调
      *
@@ -45,16 +46,21 @@ public class PayController extends BaseController {
      * <return_msg><![CDATA[OK]]></return_msg>
      * </xml>
      */
-    @PostMapping(value = Const.NOTIFY_URL, consumes = "text/xml")
-    public JsonRet<Boolean> confirm(@RequestBody EncryptedRespDto dto) {
-
+    @PostMapping(value = Const.NOTIFY_URL, consumes = "text/xml", produces = "text/xml")
+    public String notify(@RequestBody EncryptedRespDto dto) {
+        logger.warn("wx pay notify->{}", JsonUtil.toJson(dto));
         if (WxPayNotice.SUCCESS.name().equals(dto.getReturn_code())
-                && WxPayNotice.SUCCESS.name().equals(dto.getResult_code())) {
+                && WxPayNotice.SUCCESS.name().equals(dto.getResult_code())
+                && checkSign()) {
             orderService.finishPay(dto.getOut_trade_no());
-        } else {
-            logger.warn("wx pay notify->{}", JsonUtil.toJson(dto));
+            return WxPayNotice.noticeSuccess();
         }
-        return JsonRet.success();
+        return WxPayNotice.noticeFail();
+    }
+
+    private boolean checkSign() {
+        //todo
+        return true;
     }
 
 }
