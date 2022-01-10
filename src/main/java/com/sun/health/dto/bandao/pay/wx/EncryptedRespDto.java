@@ -63,7 +63,7 @@ public class EncryptedRespDto {
         this.resource = resource;
     }
 
-    class Resource {
+    static class Resource {
         private String original_type;
         private String algorithm;
         private String ciphertext;
