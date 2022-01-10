@@ -19,6 +19,10 @@ public enum OrderStatus {
         this.desc = desc;
     }
 
+    public static boolean hasPaid(String status) {
+        return PAID.getCode().equals(status);
+    }
+
     public String getCode() {
         return code;
     }
@@ -26,4 +30,6 @@ public enum OrderStatus {
     public String getDesc() {
         return desc;
     }
+
+
 }

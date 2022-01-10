@@ -10,4 +10,6 @@ import java.util.List;
 public interface OrderMasterRepository extends JpaRepository<OrderMasterEntity,Long> {
 
     List<OrderMasterEntity> findByUserId(Long userId);
+
+    OrderMasterEntity findByOrderNo(String orderNo);
 }

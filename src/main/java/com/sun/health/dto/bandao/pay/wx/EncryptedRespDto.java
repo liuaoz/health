@@ -1,6 +1,7 @@
 package com.sun.health.dto.bandao.pay.wx;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 /**
  * 支付成功结果通知
@@ -8,107 +9,148 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "xml")
 public class EncryptedRespDto {
 
-    private String id;
-    private String create_time;
-    private String resource_type;
-    private String event_type;
-    private String summary;
-    private Resource resource;
+    private String appid;
+    private String bank_type;
+    private int cash_fee;
+    private String fee_type;
+    private String is_subscribe;
+    private String mch_id;
+    private String nonce_str;
+    private String openid;
+    private String out_trade_no;
+    private String result_code;
+    private String return_code;
+    private String sign;
+    private Date time_end;
+    private int total_fee;
+    private String trade_type;
+    private String transaction_id;
 
-    public String getId() {
-        return id;
+    public String getAppid() {
+        return appid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAppid(String appid) {
+        this.appid = appid;
     }
 
-    public String getCreate_time() {
-        return create_time;
+    public String getBank_type() {
+        return bank_type;
     }
 
-    public void setCreate_time(String create_time) {
-        this.create_time = create_time;
+    public void setBank_type(String bank_type) {
+        this.bank_type = bank_type;
     }
 
-    public String getResource_type() {
-        return resource_type;
+    public int getCash_fee() {
+        return cash_fee;
     }
 
-    public void setResource_type(String resource_type) {
-        this.resource_type = resource_type;
+    public void setCash_fee(int cash_fee) {
+        this.cash_fee = cash_fee;
     }
 
-    public String getEvent_type() {
-        return event_type;
+    public String getFee_type() {
+        return fee_type;
     }
 
-    public void setEvent_type(String event_type) {
-        this.event_type = event_type;
+    public void setFee_type(String fee_type) {
+        this.fee_type = fee_type;
     }
 
-    public String getSummary() {
-        return summary;
+    public String getIs_subscribe() {
+        return is_subscribe;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setIs_subscribe(String is_subscribe) {
+        this.is_subscribe = is_subscribe;
     }
 
-    public Resource getResource() {
-        return resource;
+    public String getMch_id() {
+        return mch_id;
     }
 
-    public void setResource(Resource resource) {
-        this.resource = resource;
+    public void setMch_id(String mch_id) {
+        this.mch_id = mch_id;
     }
 
-    static class Resource {
-        private String original_type;
-        private String algorithm;
-        private String ciphertext;
-        private String associated_data;
-        private String nonce;
-
-        public String getOriginal_type() {
-            return original_type;
-        }
-
-        public void setOriginal_type(String original_type) {
-            this.original_type = original_type;
-        }
-
-        public String getAlgorithm() {
-            return algorithm;
-        }
-
-        public void setAlgorithm(String algorithm) {
-            this.algorithm = algorithm;
-        }
-
-        public String getCiphertext() {
-            return ciphertext;
-        }
-
-        public void setCiphertext(String ciphertext) {
-            this.ciphertext = ciphertext;
-        }
-
-        public String getAssociated_data() {
-            return associated_data;
-        }
-
-        public void setAssociated_data(String associated_data) {
-            this.associated_data = associated_data;
-        }
-
-        public String getNonce() {
-            return nonce;
-        }
-
-        public void setNonce(String nonce) {
-            this.nonce = nonce;
-        }
+    public String getNonce_str() {
+        return nonce_str;
     }
 
+    public void setNonce_str(String nonce_str) {
+        this.nonce_str = nonce_str;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public String getOut_trade_no() {
+        return out_trade_no;
+    }
+
+    public void setOut_trade_no(String out_trade_no) {
+        this.out_trade_no = out_trade_no;
+    }
+
+    public String getResult_code() {
+        return result_code;
+    }
+
+    public void setResult_code(String result_code) {
+        this.result_code = result_code;
+    }
+
+    public String getReturn_code() {
+        return return_code;
+    }
+
+    public void setReturn_code(String return_code) {
+        this.return_code = return_code;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public Date getTime_end() {
+        return time_end;
+    }
+
+    public void setTime_end(Date time_end) {
+        this.time_end = time_end;
+    }
+
+    public int getTotal_fee() {
+        return total_fee;
+    }
+
+    public void setTotal_fee(int total_fee) {
+        this.total_fee = total_fee;
+    }
+
+    public String getTrade_type() {
+        return trade_type;
+    }
+
+    public void setTrade_type(String trade_type) {
+        this.trade_type = trade_type;
+    }
+
+    public String getTransaction_id() {
+        return transaction_id;
+    }
+
+    public void setTransaction_id(String transaction_id) {
+        this.transaction_id = transaction_id;
+    }
 }

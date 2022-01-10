@@ -55,7 +55,7 @@ public class OrderService extends AbstractService {
     private WxPayConfig wxPayConfig;
 
     /**
-     *
+     * 获取订单
      */
     public OrderMasterEntity findById(Long id) {
         return orderMasterRepository.getById(id);
@@ -98,8 +98,53 @@ public class OrderService extends AbstractService {
         return orderMasterRepository.findByUserId(userId);
     }
 
+    /**
+     * 获取订单明细
+     *
+     * @param orderId 订单id
+     * @return 订单明细
+     */
     public List<OrderDetailEntity> getOrderDetailList(Long orderId) {
         return orderDetailRepository.findByOrderId(orderId);
+    }
+
+    /**
+     * 取消订单
+     */
+    public boolean cancelOrder(Long id) {
+        OrderMasterEntity order = findById(id);
+        if (Objects.nonNull(order) && OrderStatus.TO_BE_PAID.name().equals(order.getStatus())) {
+            order.setStatus(OrderStatus.CANCELLED.getCode());
+            orderMasterRepository.save(order);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 完成支付
+     */
+    public void finishPay(String orderNo) {
+
+        OrderMasterEntity order = orderMasterRepository.findByOrderNo(orderNo);
+
+        if (Objects.isNull(order)) {
+            logger.warn("订单不存在,orderNo={}", orderNo);
+            return;
+        }
+
+        if (OrderStatus.hasPaid(order.getStatus())) {
+            logger.warn("订单已支付,orderNo={}", orderNo);
+            return;
+        }
+
+        if (OrderStatus.TO_BE_PAID.getCode().equals(order.getStatus())) {
+            //修改订单状态为已完成
+            order.setStatus(OrderStatus.PAID.getCode());
+            orderMasterRepository.save(order);
+        } else {
+            logger.warn("订单号：{},订单状态为{}。支付通知不做任何处理。", orderNo, order.getStatus());
+        }
     }
 
     /**
