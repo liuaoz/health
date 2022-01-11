@@ -8,7 +8,9 @@ import com.sun.health.core.util.XmlUtil;
 import com.sun.health.dto.bandao.pay.PayOrderDto;
 import com.sun.health.dto.bandao.pay.UnifiedOrderRespDto;
 import com.sun.health.entity.bandao.order.OrderMasterEntity;
+import com.sun.health.entity.bandao.user.UserEntity;
 import com.sun.health.service.AbstractService;
+import com.sun.health.service.bandao.user.UserService;
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
 import com.wechat.pay.contrib.apache.httpclient.auth.ScheduledUpdateCertificatesVerifier;
@@ -40,6 +42,9 @@ public class WxPayService extends AbstractService {
     @Autowired
     private WxPayConfig wxPayConfig;
 
+    @Autowired
+    private UserService userService;
+
     private static final String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
     public static final String url_unified_order = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     private static final String notify_url = "https://www.sunoribt.com/health/pay/" + Const.NOTIFY_URL;
@@ -55,7 +60,9 @@ public class WxPayService extends AbstractService {
     public UnifiedOrderRespDto unifiedOrder(OrderMasterEntity masterEntity) {
 
         UnifiedOrderRespDto respDto;
-        String body = assembleBody(masterEntity);
+
+        UserEntity user = userService.getById(masterEntity.getUserId());
+        String body = assembleBody(masterEntity, user);
 
         HttpClient client = HttpClient.newBuilder().build();
 
@@ -82,7 +89,7 @@ public class WxPayService extends AbstractService {
         return respDto;
     }
 
-    private String assembleBody(OrderMasterEntity masterEntity) {
+    private String assembleBody(OrderMasterEntity masterEntity, UserEntity user) {
 
         String goodDesc = "海鲜";
         int totalFee = masterEntity.getTotalFee();
@@ -96,7 +103,7 @@ public class WxPayService extends AbstractService {
                 "mch_id=" + wxPayConfig.getMchId(),
                 "nonce_str=" + nonceStr,
                 "notify_url=" + notify_url,
-                "openid=" + myOpenid,
+                "openid=" + user.getOpenId(),
                 "out_trade_no=" + outTradeNo,
                 "spbill_create_ip=" + spbill_create_ip,
                 "total_fee=" + totalFee,

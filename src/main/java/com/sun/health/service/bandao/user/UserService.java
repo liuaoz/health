@@ -28,4 +28,7 @@ public class UserService extends AbstractService {
         return !Objects.isNull(getByOpenId(openId));
     }
 
+    public UserEntity getById(Long id){
+        return userRepository.getById(id);
+    }
 }
