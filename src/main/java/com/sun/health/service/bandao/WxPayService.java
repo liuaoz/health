@@ -48,7 +48,6 @@ public class WxPayService extends AbstractService {
     private static final String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
     public static final String url_unified_order = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     private static final String notify_url = "https://www.sunoribt.com/health/pay/" + Const.NOTIFY_URL;
-    private static final String myOpenid = "owJBV43C3ugI76lqpuFpzWQt7o3c";
     public static final String spbill_create_ip = "106.14.67.97";
 
     private CloseableHttpClient httpClient;
@@ -120,7 +119,7 @@ public class WxPayService extends AbstractService {
                 + "<mch_id>" + wxPayConfig.getMchId() + "</mch_id>"
                 + "<nonce_str>" + nonceStr + "</nonce_str>"
                 + "<notify_url>" + notify_url + "</notify_url>"
-                + "<openid>" + myOpenid + "</openid>"
+                + "<openid>" + user.getOpenId() + "</openid>"
                 + "<out_trade_no>" + outTradeNo + "</out_trade_no>"
                 + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"
                 + "<total_fee>" + totalFee + "</total_fee>"
@@ -129,19 +128,6 @@ public class WxPayService extends AbstractService {
                 + "</xml>";
 
         return body;
-    }
-
-    private PayOrderDto assemble() {
-
-        return new PayOrderDto().newBuilder()
-                .buildAppid(wxPayConfig.getAppid())
-                .buildAmount(1, "CNY")
-                .buildDescription("半岛兄弟")
-                .buildMchid(wxPayConfig.getMchId())
-                .buildPayer(myOpenid)
-                .buildNotifyUrl(notify_url)
-                .buildOutTradeNo(UUID.randomUUID().toString().substring(0, 32))
-                .build();
     }
 
     public void getOpenid() {
