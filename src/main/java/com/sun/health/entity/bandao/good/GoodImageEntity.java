@@ -2,6 +2,7 @@ package com.sun.health.entity.bandao.good;
 
 import com.sun.health.entity.BaseEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -37,6 +38,7 @@ public class GoodImageEntity extends BaseEntity {
     /**
      * 内容
      */
+    @Column(columnDefinition = "mediumblob")
     private byte[] content;
 
     public Long getGoodId() {

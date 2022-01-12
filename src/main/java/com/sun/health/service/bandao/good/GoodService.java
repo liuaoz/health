@@ -1,13 +1,18 @@
 package com.sun.health.service.bandao.good;
 
+import com.sun.health.core.util.FileUtil;
 import com.sun.health.entity.bandao.cart.CartEntity;
 import com.sun.health.entity.bandao.good.GoodEntity;
+import com.sun.health.entity.bandao.good.GoodImageEntity;
+import com.sun.health.repository.bandao.good.GoodImageRepository;
 import com.sun.health.repository.bandao.good.GoodRepository;
 import com.sun.health.service.AbstractService;
 import com.sun.health.service.bandao.cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +21,9 @@ public class GoodService extends AbstractService {
 
     @Autowired
     private GoodRepository goodRepository;
+
+    @Autowired
+    private GoodImageRepository goodImageRepository;
 
     @Autowired
     private CartService cartService;
@@ -41,6 +49,28 @@ public class GoodService extends AbstractService {
      */
     public GoodEntity getById(Long goodId) {
         return goodRepository.getById(goodId);
+    }
+
+    /**
+     * 保存商品图片
+     */
+    public boolean uploadGoodImage(Long goodId, MultipartFile file) {
+        String filename = file.getOriginalFilename();
+        byte[] content;
+
+        try {
+            InputStream is = file.getInputStream();
+            content = FileUtil.inputStream2ByteArray(is);
+        } catch (Exception e) {
+            logger.error("upload good image error.goodId=" + goodId + ",fileName=" + filename, e);
+            return false;
+        }
+        GoodImageEntity goodImage = new GoodImageEntity();
+        goodImage.setGoodId(goodId);
+        goodImage.setContent(content);
+        goodImage.setFileName(filename);
+        goodImageRepository.save(goodImage);
+        return true;
     }
 
 

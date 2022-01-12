@@ -4,6 +4,7 @@ import com.sun.health.comm.Const;
 import com.sun.health.controller.BaseController;
 import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
+import com.sun.health.core.util.FileUtil;
 import com.sun.health.dto.bandao.good.GoodDto;
 import com.sun.health.entity.bandao.good.GoodEntity;
 import com.sun.health.entity.bandao.user.UserEntity;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,9 +56,7 @@ public class GoodController extends BaseController {
     // 后端接口
     @PostMapping("/image/upload")
     public JsonRet<Boolean> uploadGoodImage(@RequestParam("file") MultipartFile file, @RequestParam("goodId") Long goodId) {
-
-        logger.info(file.getOriginalFilename());
-        logger.info("--->" + goodId);
-        return JsonRet.success();
+        boolean result = goodService.uploadGoodImage(goodId, file);
+        return JsonRet.success(result);
     }
 }

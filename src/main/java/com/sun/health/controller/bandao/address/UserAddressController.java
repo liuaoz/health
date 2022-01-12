@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,9 @@ public class UserAddressController extends BaseController {
 //        UserAddressDto dto = new UserAddressDto();
 //        BeanUtils.copyProperties(addressEntity, dto);
 //        return JsonRet.success(dto);
+
         List<UserAddressDto> list = list(user).getData();
+//        List<UserAddressDto> list = new ArrayList<>();
         if (CollectionUtils.isEmpty(list)) {
             return JsonRet.success();
         }
