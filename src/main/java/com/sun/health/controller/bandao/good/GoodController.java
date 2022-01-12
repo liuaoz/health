@@ -55,8 +55,14 @@ public class GoodController extends BaseController {
 
     // 后端接口
     @PostMapping("/image/upload")
-    public JsonRet<Boolean> uploadGoodImage(@RequestParam("file") MultipartFile file, @RequestParam("goodId") Long goodId) {
-        boolean result = goodService.uploadGoodImage(goodId, file);
+    public JsonRet<Boolean> uploadGoodImage(@RequestParam("files") MultipartFile[] files, @RequestParam("goodId") Long goodId) {
+        boolean result = true;
+        for (MultipartFile file : files) {
+            boolean b = goodService.uploadGoodImage(goodId, file);
+            if (!b) {
+                result = false;
+            }
+        }
         return JsonRet.success(result);
     }
 }
