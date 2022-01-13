@@ -7,6 +7,7 @@ import com.sun.health.core.comm.JsonRet;
 import com.sun.health.core.util.FileUtil;
 import com.sun.health.dto.bandao.good.GoodDto;
 import com.sun.health.entity.bandao.good.GoodEntity;
+import com.sun.health.entity.bandao.good.GoodImageEntity;
 import com.sun.health.entity.bandao.user.UserEntity;
 import com.sun.health.service.bandao.cart.CartService;
 import com.sun.health.service.bandao.good.GoodService;
@@ -52,8 +53,15 @@ public class GoodController extends BaseController {
         return JsonRet.success(list);
     }
 
+    @GetMapping("/good/image/{goodImageId}")
+    public void getGoodImage(@PathVariable Long goodImageId){
+        GoodImageEntity goodImageEntity = goodService.findById(goodImageId);
 
-    // 后端接口
+
+    }
+
+
+    // 管理后台接口
     @PostMapping("/image/upload")
     public JsonRet<Boolean> uploadGoodImage(@RequestParam("files") MultipartFile[] files, @RequestParam("goodId") Long goodId) {
         boolean result = true;

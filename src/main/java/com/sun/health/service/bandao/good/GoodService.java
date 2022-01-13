@@ -73,5 +73,12 @@ public class GoodService extends AbstractService {
         return true;
     }
 
+    /**
+     * 获取指定商品图片
+     */
+    public GoodImageEntity findById(Long goodImageId) {
+        return goodImageRepository.getById(goodImageId);
+    }
+
 
 }
