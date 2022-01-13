@@ -80,5 +80,12 @@ public class GoodService extends AbstractService {
         return goodImageRepository.getById(goodImageId);
     }
 
+    /**
+     * 商品图片列表
+     */
+    public List<GoodImageEntity> getImagesById(Long goodId){
+        return goodImageRepository.findByGoodId(goodId);
+    }
+
 
 }
