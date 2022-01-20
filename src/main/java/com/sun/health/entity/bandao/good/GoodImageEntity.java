@@ -16,6 +16,11 @@ public class GoodImageEntity extends BaseEntity {
     private Long goodId;
 
     /**
+     * 文件id
+     */
+    private Long fileId;
+
+    /**
      * 文件名称
      */
     private String fileName;
@@ -40,6 +45,14 @@ public class GoodImageEntity extends BaseEntity {
      */
     @Column(columnDefinition = "mediumblob")
     private byte[] content;
+
+    public Long getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(Long fileId) {
+        this.fileId = fileId;
+    }
 
     public Long getGoodId() {
         return goodId;

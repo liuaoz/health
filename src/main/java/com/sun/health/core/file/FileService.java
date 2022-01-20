@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-@Service
+@Service("coreFileService")
 public class FileService {
 
     private Path location;
