@@ -32,11 +32,11 @@ public class FileController extends BaseController {
     }
 
     /**
-     * 根据id获取文件
+     * 根据id获取图片
      */
-    @GetMapping(value = "/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/image/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
-    public byte[] getFile(@PathVariable Long id) {
+    public byte[] getImage(@PathVariable Long id) {
         FileEntity fileEntity = fileService.findById(id);
         return fileEntity.getContent();
     }
