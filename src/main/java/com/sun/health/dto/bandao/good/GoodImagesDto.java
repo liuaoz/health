@@ -1,19 +1,17 @@
 package com.sun.health.dto.bandao.good;
 
-import com.sun.health.dto.BaseDTO;
-
 /**
  * 商品的图片名称
  */
-public class GoodImagesDto extends BaseDTO {
+public class GoodImagesDto {
 
-    private String fileName;
+    private String url;
 
-    public String getFileName() {
-        return fileName;
+    public String getUrl() {
+        return url;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

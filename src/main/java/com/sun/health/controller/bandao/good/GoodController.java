@@ -67,7 +67,7 @@ public class GoodController extends BaseController {
         List<GoodImageEntity> images = goodService.getImagesById(goodId);
         List<GoodImagesDto> dtoList = images.stream().map(t -> {
             GoodImagesDto dto = new GoodImagesDto();
-            BeanUtils.copyProperties(t, dto);
+            dto.setUrl(imageConfig.getPath() + t.getId());
             return dto;
         }).collect(Collectors.toList());
         return JsonRet.success(dtoList);
