@@ -29,6 +29,9 @@ spring:
       repositories:
         enabled: false
 
+image:
+  path: ${IMAGE_PATH:https://sunoribt.com/health/file/image/}
+
 
 cloud:
   tencent:

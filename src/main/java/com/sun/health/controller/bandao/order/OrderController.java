@@ -1,6 +1,6 @@
 package com.sun.health.controller.bandao.order;
 
-import com.sun.health.comm.Const;
+import com.sun.health.config.ImageConfig;
 import com.sun.health.controller.BaseController;
 import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
@@ -22,10 +22,13 @@ public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private ImageConfig imageConfig;
+
     @GetMapping("/list")
     public JsonRet<List<OrderMasterDto>> getOrderList(@CurrentUser UserEntity user) {
         List<OrderMasterDto> list = orderService.getOrderListWithGoods(user.getId());
-        list.forEach(master -> master.getGoods().forEach(good -> good.setLogo(Const.imageServer + good.getLogo())));
+        list.forEach(master -> master.getGoods().forEach(good -> good.setLogo(imageConfig.getPath() + good.getId())));
         return JsonRet.success(list);
     }
 

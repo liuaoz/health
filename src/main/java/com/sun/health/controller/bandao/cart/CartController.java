@@ -1,6 +1,6 @@
 package com.sun.health.controller.bandao.cart;
 
-import com.sun.health.comm.Const;
+import com.sun.health.config.ImageConfig;
 import com.sun.health.controller.BaseController;
 import com.sun.health.core.annotation.CurrentUser;
 import com.sun.health.core.comm.JsonRet;
@@ -21,6 +21,9 @@ public class CartController extends BaseController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private ImageConfig imageConfig;
 
     @PutMapping("/selectAll/{selectAll}")
     public JsonRet<Boolean> selectHandle(@CurrentUser UserEntity user, @PathVariable boolean selectAll) {
@@ -66,7 +69,7 @@ public class CartController extends BaseController {
         List<CartGoodDto> cartList = cartService.getCartList(user.getId());
         cartList.forEach(t -> {
             GoodDto good = t.getGood();
-            good.setLogo(Const.imageServer + good.getLogo());
+            good.setLogo(imageConfig.getPath() + good.getId());
         });
         return JsonRet.success(cartList);
     }

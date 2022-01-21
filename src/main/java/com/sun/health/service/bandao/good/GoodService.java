@@ -87,14 +87,11 @@ public class GoodService extends AbstractService {
         }
         fileService.save(fileEntity);
 
-
         GoodImageEntity goodImage = new GoodImageEntity();
         goodImage.setGoodId(goodId);
-        goodImage.setContent(content);
         goodImage.setFileName(filename);
         goodImage.setFileId(fileEntity.getId());
         goodImageRepository.save(goodImage);
-
 
         return true;
     }
