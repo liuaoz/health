@@ -3,8 +3,11 @@ package com.sun.health.core.util;
 import com.sun.health.core.comm.DataHolder;
 import org.springframework.util.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,10 +68,64 @@ public final class StringUtil {
     }
 
     /**
+     * 生成指定范围的数[min,max]
+     */
+    public static int randInt(int min, int max) {
+        return new Random().nextInt(max) % (max - min + 1) + min;
+    }
+
+    /**
+     * 生成字符串（包含number个字母(a-z)）
+     */
+    public static String randLetter(int number) {
+
+        int start = 'a';
+        int end = 'z';
+
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < number; i++) {
+            int tmp = random.nextInt(end) % (end - start + 1) + start;
+            sb.append((char) tmp);
+        }
+        return sb.toString();
+    }
+
+    public static String randHanzi() {
+
+        int highPos, lowPos; // 定义高低位
+
+        Random random = new Random();
+
+        highPos = (176 + Math.abs(random.nextInt(39)));//获取高位值
+
+        lowPos = (161 + Math.abs(random.nextInt(93)));//获取低位值
+
+        byte[] b = new byte[2];
+
+        b[0] = (Integer.valueOf(highPos).byteValue());
+
+        b[1] = (Integer.valueOf(lowPos).byteValue());
+
+        try {
+            return new String(b, "GBK");//转成中文
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        randHanzi();
+    }
+
+    /**
      * 202112250610
+     *
      * @return
      */
-    public static String dateTimeString(){
+    public static String dateTimeString() {
         return null;
     }
 }

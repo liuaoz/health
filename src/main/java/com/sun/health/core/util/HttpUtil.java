@@ -1,11 +1,10 @@
 package com.sun.health.core.util;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +12,41 @@ import java.util.Map;
  * http util
  */
 public final class HttpUtil {
+
+    public static void main(String[] args) {
+        ipProxy("122.234.168.113","8060");
+    }
+
+    public static void ipProxy(String host, String port) {
+
+        SocketAddress addr = new InetSocketAddress(host, Integer.parseInt(port));
+
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, addr);
+
+        try {
+
+//            URL url = new URL("http://www.xiaoqushuo.com/getyt?kw=ala&cb=sh&callback=sh&_=1647702066917");
+            URL url = new URL("http://www.baidu.com");
+
+            URLConnection conn = url.openConnection(proxy);
+
+            conn.setConnectTimeout(5000);
+
+//            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 7.0; NT 5.1; GTB5; .NET CLR 2.0.50727; CIBA)");
+
+            InputStream is = conn.getInputStream();
+
+            byte[] bytes = is.readAllBytes();
+
+            System.out.println(new String(bytes));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+    }
 
 
     /**

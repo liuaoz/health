@@ -12,4 +12,9 @@ public class Const {
 //    public static final String imageServer = "http://106.14.67.97/health/image/";
 
     public static final String NOTIFY_URL = "notify";
+
+    //xiaoqushuo
+    public static final String XIAO_QU_SHUO_BASE_URL = "http://www.xiaoqushuo.com";
+    public static final String XIAO_QU_SHUO_API_PREFIX= "/getyt";
+
 }
