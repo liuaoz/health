@@ -24,13 +24,47 @@ public class HousingEstateController extends BaseController {
     @Autowired
     private HousingEstateService housingEstateService;
 
-    @GetMapping("/{keyword}")
+    @GetMapping("/ajk/{keyword}")
+    public JsonRet<Boolean> getDataFromAnJuKe(@PathVariable String keyword) {
+        housingEstateService.handleAnJuKe(keyword);
+        return JsonRet.success();
+    }
+
+    @GetMapping("/ajk/start")
+    public JsonRet<Boolean> getDataFromAnJuKeAuto() {
+        Date begin = new Date();
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(new Random().nextInt(3000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+//                String keyword = StringUtil.randLetter(3);
+                String first = StringUtil.randHanzi();
+//                String second = StringUtil.randHanzi();
+                if (Objects.isNull(first)) {
+                    continue;
+                }
+                String keyword = first;
+                housingEstateService.handleAnJuKe(keyword);
+                Date now = new Date();
+                long delta = now.getTime() - begin.getTime();
+                if (delta / 1000 - 50 * 60 > 0) {
+                    break;
+                }
+            }
+        }).start();
+        return JsonRet.success();
+    }
+
+    @GetMapping("/xiaoqushuo/{keyword}")
     public JsonRet<List<HousingEstateEntity>> getData(@PathVariable String keyword) {
-        List<HousingEstateEntity> list = housingEstateService.handle(Const.XIAO_QU_SHUO_BASE_URL + Const.XIAO_QU_SHUO_API_PREFIX + "?kw=" + keyword, keyword);
+        List<HousingEstateEntity> list = housingEstateService.handleXiaoQuShuo(keyword);
         return JsonRet.success(list);
     }
 
-    @GetMapping("/start")
+    @GetMapping("/xiaoqushuo/start")
     public JsonRet<Boolean> start() {
         Date begin = new Date();
         new Thread(() -> {
@@ -43,12 +77,11 @@ public class HousingEstateController extends BaseController {
 //                String keyword = StringUtil.randLetter(3);
                 String first = StringUtil.randHanzi();
 //                String second = StringUtil.randHanzi();
-                if (Objects.isNull(first) ){
+                if (Objects.isNull(first)) {
                     continue;
                 }
-                String keyword = first ;
-                String url = Const.XIAO_QU_SHUO_BASE_URL + Const.XIAO_QU_SHUO_API_PREFIX + "?kw=" + keyword;
-                housingEstateService.handle(url, keyword);
+                String keyword = first;
+                housingEstateService.handleXiaoQuShuo(keyword);
                 Date now = new Date();
                 long delta = now.getTime() - begin.getTime();
                 if (delta / 1000 - 50 * 60 > 0) {

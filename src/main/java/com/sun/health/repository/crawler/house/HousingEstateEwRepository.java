@@ -10,4 +10,6 @@ import java.util.List;
 public interface HousingEstateEwRepository extends JpaRepository<HousingEstateKwEntity,Long> {
 
     List<HousingEstateKwEntity> findByKeyword(String keyword);
+
+    List<HousingEstateKwEntity> findByKeywordAndSource(String keyword,String source);
 }

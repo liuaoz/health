@@ -1,16 +1,23 @@
 package com.sun.health.service.crawler.house;
 
+import com.sun.health.comm.Const;
 import com.sun.health.core.util.JsonUtil;
 import com.sun.health.entity.crawler.shelter.HousingEstateEntity;
 import com.sun.health.entity.crawler.shelter.HousingEstateKwEntity;
 import com.sun.health.repository.crawler.house.HousingEstateEwRepository;
 import com.sun.health.repository.crawler.house.HousingEstateRepository;
 import com.sun.health.service.AbstractService;
+import com.sun.health.service.crawler.CrawlerSource;
+import com.sun.health.service.crawler.house.anjuke.AnJuKeDto;
+import com.sun.health.service.crawler.house.anjuke.AnJuKeResp;
+import com.sun.health.service.crawler.house.xiaoqushuo.HousingEstateDto;
+import com.sun.health.service.crawler.house.xiaoqushuo.HousingEstateResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -30,6 +37,8 @@ public class HousingEstateService extends AbstractService {
 
     // url: http://www.xiaoqushuo.com/getyt?kw=we&cb=sh&callback=sh&_=1647702066917
 
+    public static final String AJK_URL = "https://shanghai.anjuke.com/esf-ajax/community/pc/autocomplete?city_id=11&type=2&kw=";
+
 
     @Autowired
     private HousingEstateRepository housingEstateRepository;
@@ -37,9 +46,56 @@ public class HousingEstateService extends AbstractService {
     @Autowired
     private HousingEstateEwRepository housingEstateEwRepository;
 
-    public List<HousingEstateEntity> handle(String url, String keyword) {
+    /**
+     * 58同城和安居客同一个接口
+     */
+    public List<HousingEstateEntity> handle58Tongcheng(String keyword) {
 
-        if (existsKeyword(keyword)) {
+        return new ArrayList<>();
+    }
+
+    public List<HousingEstateEntity> handleAnJuKe(String keyword) {
+
+        if (existsKeyword(keyword, CrawlerSource.AN_JU_KE.getName())) {
+            return new ArrayList<>();
+        }
+
+        HttpClient client = HttpClient.newBuilder()
+                .build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(AJK_URL + keyword))
+                .header("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3100.0 Safari/537.36")
+                .build();
+
+        try {
+            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info("keyword={};;resp={}", keyword, httpResponse.body());
+            if (HttpStatus.valueOf(httpResponse.statusCode()).is2xxSuccessful()) {
+                String respBody = httpResponse.body();
+                AnJuKeResp resp = JsonUtil.fromJson(respBody, AnJuKeResp.class);
+
+                saveKeyword(keyword, CrawlerSource.AN_JU_KE.getName());
+                if ("ok".equals(resp.getStatus())) {
+                    List<AnJuKeDto> juKeDtos = resp.getData();
+                    List<HousingEstateEntity> housingEstateEntities = juKeDtos.stream().map(this::fromAnJuKe).collect(Collectors.toList());
+                    save(housingEstateEntities);
+                    return housingEstateEntities;
+                }
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
+    public List<HousingEstateEntity> handleXiaoQuShuo(String keyword) {
+
+        String url = Const.XIAO_QU_SHUO_BASE_URL + Const.XIAO_QU_SHUO_API_PREFIX + "?kw=" + keyword;
+
+        if (existsKeyword(keyword, CrawlerSource.XIAO_QU_SHUO.getName())) {
             return new ArrayList<>();
         }
 
@@ -48,7 +104,7 @@ public class HousingEstateService extends AbstractService {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3100.0 Safari/537.36")
+                .header("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3100.0 Safari/537.36")
                 .build();
 
         try {
@@ -59,20 +115,20 @@ public class HousingEstateService extends AbstractService {
                 String realData = respBody.substring(3, respBody.length() - 1);
                 HousingEstateResp housingEstateResp = JsonUtil.fromJson(realData, HousingEstateResp.class);
 
+                saveKeyword(keyword, CrawlerSource.XIAO_QU_SHUO.getName());
                 //有匹配
                 List<HousingEstateDto> estateRespS = housingEstateResp.getS();
                 if (Objects.nonNull(estateRespS)) {
-                    List<HousingEstateEntity> housingEstateEntities = estateRespS.stream().map(this::map).collect(Collectors.toList());
+                    List<HousingEstateEntity> housingEstateEntities = estateRespS.stream().map(this::fromXiaoQuShuo).collect(Collectors.toList());
                     save(housingEstateEntities);
                     return housingEstateEntities;
                 }
-                saveKeyword(keyword);
+
             }
         } catch (Exception e) {
             logger.error("get data from xiaoqushuo error. url=" + url, e);
         }
         return new ArrayList<>();
-
     }
 
     public boolean exists(String name, String address) {
@@ -80,27 +136,40 @@ public class HousingEstateService extends AbstractService {
         return Objects.nonNull(housingEstate);
     }
 
-    public boolean existsKeyword(String keyword) {
-        List<HousingEstateKwEntity> entities = housingEstateEwRepository.findByKeyword(keyword);
+    public boolean existsKeyword(String keyword, String source) {
+        List<HousingEstateKwEntity> entities = housingEstateEwRepository.findByKeywordAndSource(keyword, source);
         return !CollectionUtils.isEmpty(entities);
     }
 
-    public void saveKeyword(String keyword) {
+    public void saveKeyword(String keyword, String source) {
         HousingEstateKwEntity kw = new HousingEstateKwEntity();
         kw.setKeyword(keyword);
+        kw.setSource(source);
         housingEstateEwRepository.save(kw);
     }
 
-    private HousingEstateEntity map(HousingEstateDto dto) {
+    private HousingEstateEntity fromAnJuKe(AnJuKeDto dto) {
+        HousingEstateEntity entity = new HousingEstateEntity();
+        entity.setAddress(dto.getAddress());
+        entity.setName(dto.getName());
+        entity.setSource(CrawlerSource.AN_JU_KE.getName());
+        entity.setPrice(dto.getPrice());
+        entity.setDistrict(dto.getAreaName());
+        return entity;
+    }
+
+    private HousingEstateEntity fromXiaoQuShuo(HousingEstateDto dto) {
         HousingEstateEntity entity = new HousingEstateEntity();
         entity.setAddress(dto.getDizhi());
         entity.setCode(dto.getSid());
         entity.setName(dto.getIsb());
-        entity.setDistrict("todo");
         entity.setLatitude(dto.getLat());
         entity.setLongitude(dto.getLng());
         entity.setSearch(dto.getSearch());
         entity.setTitle(dto.getTitle());
+        int end = dto.getTitle().indexOf("]");
+        entity.setDistrict(dto.getTitle().substring(1, end));
+        entity.setSource(CrawlerSource.XIAO_QU_SHUO.getName());
         return entity;
     }
 

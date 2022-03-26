@@ -1,4 +1,4 @@
-package com.sun.health.service.crawler.house;
+package com.sun.health.service.crawler.house.xiaoqushuo;
 
 public class HousingEstateDto {
 
