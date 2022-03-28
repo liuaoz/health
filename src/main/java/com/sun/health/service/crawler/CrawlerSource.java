@@ -3,7 +3,9 @@ package com.sun.health.service.crawler;
 public enum CrawlerSource {
 
     XIAO_QU_SHUO("xiaoqushuo"),
-    AN_JU_KE("anjuke");
+    AN_JU_KE("anjuke"),
+    TONGCHENG("tongcheng")
+    ;
 
     private String name;
 

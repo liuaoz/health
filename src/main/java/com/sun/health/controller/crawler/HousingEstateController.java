@@ -1,6 +1,5 @@
 package com.sun.health.controller.crawler;
 
-import com.sun.health.comm.Const;
 import com.sun.health.controller.BaseController;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.core.util.StringUtil;
@@ -25,6 +24,40 @@ public class HousingEstateController extends BaseController {
     @Autowired
     private HousingEstateService housingEstateService;
 
+
+    @GetMapping("/tongcheng/start")
+    public JsonRet<Boolean> getDataFromTongChengAuto() {
+        Date begin = new Date();
+        new Thread(() -> {
+            while (true) {
+
+                String keyword = StringUtil.randLetter(3);
+//                String first = StringUtil.randHanzi();
+//                String second = StringUtil.randHanzi();
+                if (Objects.isNull(keyword)) {
+                    continue;
+                }
+//                keyword = first + keyword;
+                boolean exists = housingEstateService.existsKeyword(keyword, CrawlerSource.TONGCHENG.getName());
+                if (exists) {
+                    continue;
+                }
+                try {
+                    Thread.sleep(new Random().nextInt(3000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                housingEstateService.handleTongCheng(keyword);
+                Date now = new Date();
+                long delta = now.getTime() - begin.getTime();
+                if (delta / 1000 - 50 * 60 > 0) {
+                    break;
+                }
+            }
+        }).start();
+        return JsonRet.success();
+    }
+
     @GetMapping("/ajk/{keyword}")
     public JsonRet<Boolean> getDataFromAnJuKe(@PathVariable String keyword) {
         housingEstateService.handleAnJuKe(keyword);
@@ -37,13 +70,13 @@ public class HousingEstateController extends BaseController {
         new Thread(() -> {
             while (true) {
 
-                String keyword = StringUtil.randLetter(3);
-//                String first = StringUtil.randHanzi();
+                String keyword = StringUtil.randLetter(1);
+                String first = StringUtil.randHanzi();
 //                String second = StringUtil.randHanzi();
-                if (Objects.isNull(keyword)) {
+                if (Objects.isNull(first)) {
                     continue;
                 }
-//                String keyword = first + second;
+                keyword = first + keyword;
                 boolean exists = housingEstateService.existsKeyword(keyword, CrawlerSource.AN_JU_KE.getName());
                 if (exists) {
                     continue;

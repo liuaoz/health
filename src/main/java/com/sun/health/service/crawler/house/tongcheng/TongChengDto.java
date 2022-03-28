@@ -1,6 +1,6 @@
-package com.sun.health.service.crawler.house.anjuke;
+package com.sun.health.service.crawler.house.tongcheng;
 
-public class AnJuKeDto {
+public class TongChengDto {
 
     private Integer id;
 

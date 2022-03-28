@@ -1,0 +1,1 @@
+package com.sun.health.entity.life.shelter;

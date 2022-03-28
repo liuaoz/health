@@ -10,11 +10,14 @@ import com.sun.health.service.AbstractService;
 import com.sun.health.service.crawler.CrawlerSource;
 import com.sun.health.service.crawler.house.anjuke.AnJuKeDto;
 import com.sun.health.service.crawler.house.anjuke.AnJuKeResp;
+import com.sun.health.service.crawler.house.tongcheng.TongChengDto;
+import com.sun.health.service.crawler.house.tongcheng.TongChengResp;
 import com.sun.health.service.crawler.house.xiaoqushuo.HousingEstateDto;
 import com.sun.health.service.crawler.house.xiaoqushuo.HousingEstateResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
@@ -25,6 +28,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +42,7 @@ public class HousingEstateService extends AbstractService {
     // url: http://www.xiaoqushuo.com/getyt?kw=we&cb=sh&callback=sh&_=1647702066917
 
     public static final String AJK_URL = "https://shanghai.anjuke.com/esf-ajax/community/pc/autocomplete?city_id=11&type=2&kw=";
+    public static final String TONGCHENG_URL = "https://sh.58.com/esf-ajax/community/pc/autocomplete/?city_id=2&type=2&kw=";
 
 
     @Autowired
@@ -46,20 +51,47 @@ public class HousingEstateService extends AbstractService {
     @Autowired
     private HousingEstateEwRepository housingEstateEwRepository;
 
-    /**
-     * 58同城和安居客同一个接口
-     */
-    public List<HousingEstateEntity> handle58Tongcheng(String keyword) {
 
+    public List<HousingEstateEntity> handleTongCheng(String keyword) {
+        if (existsKeyword(keyword, CrawlerSource.TONGCHENG.getName())) {
+            return new ArrayList<>();
+        }
+        HttpClient client = HttpClient.newBuilder()
+                .build();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(TONGCHENG_URL+ keyword))
+                .header("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3100.0 Safari/537.36")
+                .build();
+        try {
+            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+            logger.info("keyword={};;resp={}", keyword, httpResponse.body());
+            if (HttpStatus.valueOf(httpResponse.statusCode()).is2xxSuccessful()) {
+                String respBody = httpResponse.body();
+                TongChengResp resp = JsonUtil.fromJson(respBody, TongChengResp.class);
+
+                saveKeyword(keyword, CrawlerSource.TONGCHENG.getName());
+                if ("ok".equals(resp.getStatus())) {
+                    List<TongChengDto> tongChengDtos = resp.getData();
+                    List<HousingEstateEntity> housingEstateEntities = tongChengDtos.stream().map(this::fromTongCheng).collect(Collectors.toList());
+                    save(housingEstateEntities);
+                    return housingEstateEntities;
+                }
+            } else {
+                logger.warn("handle tongcheng warn....");
+                return null;
+            }
+        } catch (IOException | InterruptedException e) {
+            logger.error("handle tongcheng error.", e);
+            return null;
+        }
         return new ArrayList<>();
     }
 
     public List<HousingEstateEntity> handleAnJuKe(String keyword) {
-
         if (existsKeyword(keyword, CrawlerSource.AN_JU_KE.getName())) {
             return new ArrayList<>();
         }
-
         HttpClient client = HttpClient.newBuilder()
                 .build();
 
@@ -67,7 +99,6 @@ public class HousingEstateService extends AbstractService {
                 .uri(URI.create(AJK_URL + keyword))
                 .header("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3100.0 Safari/537.36")
                 .build();
-
         try {
             HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
             logger.info("keyword={};;resp={}", keyword, httpResponse.body());
@@ -82,12 +113,14 @@ public class HousingEstateService extends AbstractService {
                     save(housingEstateEntities);
                     return housingEstateEntities;
                 }
+            } else {
+                logger.warn("handle ajk warn....");
+                return null;
             }
-
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            logger.error("handle ajk error.", e);
+            return null;
         }
-
         return new ArrayList<>();
     }
 
@@ -155,6 +188,18 @@ public class HousingEstateService extends AbstractService {
         entity.setSource(CrawlerSource.AN_JU_KE.getName());
         entity.setPrice(dto.getPrice());
         entity.setDistrict(dto.getAreaName());
+        entity.setSourceId(String.valueOf(dto.getId()));
+        return entity;
+    }
+
+    private HousingEstateEntity fromTongCheng(TongChengDto dto) {
+        HousingEstateEntity entity = new HousingEstateEntity();
+        entity.setAddress(dto.getAddress());
+        entity.setName(dto.getName());
+        entity.setSource(CrawlerSource.TONGCHENG.getName());
+        entity.setPrice(dto.getPrice());
+        entity.setDistrict(dto.getAreaName());
+        entity.setSourceId(String.valueOf(dto.getId()));
         return entity;
     }
 

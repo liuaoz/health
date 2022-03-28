@@ -29,6 +29,8 @@ public class HousingEstateEntity extends BaseEntity {
 
     private String price;
 
+    private String sourceId;
+
     public String getCode() {
         return code;
     }
@@ -107,5 +109,13 @@ public class HousingEstateEntity extends BaseEntity {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 }
