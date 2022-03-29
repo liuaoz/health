@@ -1,5 +1,6 @@
 package com.sun.health.service.crawler.house;
 
+import com.google.common.collect.Lists;
 import com.sun.health.comm.Const;
 import com.sun.health.core.util.JsonUtil;
 import com.sun.health.entity.crawler.shelter.HousingEstateEntity;
@@ -17,7 +18,6 @@ import com.sun.health.service.crawler.house.xiaoqushuo.HousingEstateResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
@@ -28,7 +28,6 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +49,16 @@ public class HousingEstateService extends AbstractService {
 
     @Autowired
     private HousingEstateEwRepository housingEstateEwRepository;
+
+    public List<String> getNames(CrawlerSource crawlerSource){
+        List<HousingEstateEntity> entities = housingEstateRepository.findBySource(crawlerSource.getName());
+        return entities.stream().map(HousingEstateEntity::getName).collect(Collectors.toList());
+    }
+
+    public List<String> getNames(CrawlerSource crawlerSource,Long id){
+        List<HousingEstateEntity> entities = housingEstateRepository.findBySourceAndIdGreaterThan(crawlerSource.getName(),id);
+        return entities.stream().map(HousingEstateEntity::getName).collect(Collectors.toList());
+    }
 
 
     public List<HousingEstateEntity> handleTongCheng(String keyword) {

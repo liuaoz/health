@@ -5,10 +5,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -116,8 +113,27 @@ public final class StringUtil {
         return null;
     }
 
+    /**
+     *
+     */
+    public static List<String> sub(String str, int count) {
+
+        if (Objects.isNull(str) || str.length() < count) {
+            return new ArrayList<>();
+        }
+
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < str.length() - count + 1; i++) {
+            list.add(str.substring(i, i + count));
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
-        randHanzi();
+
+        List<String> list = sub("上大阳光乾静园", 2);
+
+        System.out.println(list);
     }
 
     /**

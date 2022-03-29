@@ -25,19 +25,50 @@ public class HousingEstateController extends BaseController {
     private HousingEstateService housingEstateService;
 
 
+    @GetMapping("/tongcheng/start2")
+    public JsonRet<Boolean> getDataFromTongCheng() {
+
+        List<String> names = housingEstateService.getNames(CrawlerSource.AN_JU_KE,25810L);
+
+        new Thread(() -> {
+
+            names.forEach(name -> {
+
+
+                List<String> subs = StringUtil.sub(name, 2);
+
+                try {
+                    Thread.sleep(800);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                subs.forEach(t -> {
+                    new Thread(() -> {
+                        housingEstateService.handleTongCheng(t);
+                    }).start();
+                });
+
+            });
+        }).start();
+
+        return JsonRet.success();
+    }
+
+
     @GetMapping("/tongcheng/start")
     public JsonRet<Boolean> getDataFromTongChengAuto() {
         Date begin = new Date();
         new Thread(() -> {
             while (true) {
 
-                String keyword = StringUtil.randLetter(3);
-//                String first = StringUtil.randHanzi();
+//                String keyword = StringUtil.randLetter(3);
+                String first = StringUtil.randHanzi();
 //                String second = StringUtil.randHanzi();
-                if (Objects.isNull(keyword)) {
+                if (Objects.isNull(first)) {
                     continue;
                 }
-//                keyword = first + keyword;
+                String keyword = first;
                 boolean exists = housingEstateService.existsKeyword(keyword, CrawlerSource.TONGCHENG.getName());
                 if (exists) {
                     continue;
