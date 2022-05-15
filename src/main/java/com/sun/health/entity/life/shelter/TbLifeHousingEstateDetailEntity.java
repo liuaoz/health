@@ -32,6 +32,17 @@ public class TbLifeHousingEstateDetailEntity extends BaseEntity {
 
     private String businessDistrict;
 
+    //
+    private String parkingSpace;
+
+   private String parkingFee;
+
+   private String parkingMgrFee;
+
+   private String unifiedHeating;
+
+   private String waterPowerSupply;
+
     //物业
 
     private String propertyFee;

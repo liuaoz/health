@@ -6,6 +6,7 @@ import com.sun.health.core.util.StringUtil;
 import com.sun.health.entity.crawler.shelter.HousingEstateEntity;
 import com.sun.health.service.crawler.CrawlerSource;
 import com.sun.health.service.crawler.house.HousingEstateService;
+import com.sun.health.service.crawler.house.anjuke.AnJuKeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +25,22 @@ public class HousingEstateController extends BaseController {
     @Autowired
     private HousingEstateService housingEstateService;
 
+    @Autowired
+    private AnJuKeService anJuKeService;
+
+    @GetMapping("/ajk/detail/{houseId}")
+    public JsonRet<Boolean> getDetailFromAnJuKe(@PathVariable Integer houseId){
+
+        anJuKeService.handle(houseId);
+
+        return JsonRet.success();
+    }
+
 
     @GetMapping("/tongcheng/start2")
     public JsonRet<Boolean> getDataFromTongCheng() {
 
-        List<String> names = housingEstateService.getNames(CrawlerSource.AN_JU_KE,25810L);
+        List<String> names = housingEstateService.getNames(CrawlerSource.AN_JU_KE,0L);
 
         new Thread(() -> {
 

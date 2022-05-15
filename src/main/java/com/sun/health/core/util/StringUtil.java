@@ -136,12 +136,4 @@ public final class StringUtil {
         System.out.println(list);
     }
 
-    /**
-     * 202112250610
-     *
-     * @return
-     */
-    public static String dateTimeString() {
-        return null;
-    }
 }
