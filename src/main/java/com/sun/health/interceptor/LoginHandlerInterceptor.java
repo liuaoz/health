@@ -1,6 +1,5 @@
 package com.sun.health.interceptor;
 
-import com.sun.health.config.bandao.ErrorCode;
 import com.sun.health.core.comm.JsonRet;
 import com.sun.health.core.util.JsonUtil;
 import com.sun.health.core.util.StringUtil;
