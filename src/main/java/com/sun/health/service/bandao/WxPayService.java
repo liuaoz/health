@@ -47,7 +47,7 @@ public class WxPayService extends AbstractService {
 
     private static final String url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
     public static final String url_unified_order = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    private static final String notify_url = "https://www.sunoribt.com/health/pay/" + Const.NOTIFY_URL;
+//    private static final String notify_url = "https://www.sunoribt.com/health/pay/" + Const.NOTIFY_URL;
     public static final String spbill_create_ip = "106.14.67.97";
 
     private CloseableHttpClient httpClient;
@@ -101,7 +101,7 @@ public class WxPayService extends AbstractService {
                 "body=" + goodDesc,
                 "mch_id=" + wxPayConfig.getMchId(),
                 "nonce_str=" + nonceStr,
-                "notify_url=" + notify_url,
+                "notify_url=" + wxPayConfig.getNotifyUrl(),
                 "openid=" + user.getOpenId(),
                 "out_trade_no=" + outTradeNo,
                 "spbill_create_ip=" + spbill_create_ip,
@@ -118,7 +118,7 @@ public class WxPayService extends AbstractService {
                 + "<body>" + goodDesc + "</body>"
                 + "<mch_id>" + wxPayConfig.getMchId() + "</mch_id>"
                 + "<nonce_str>" + nonceStr + "</nonce_str>"
-                + "<notify_url>" + notify_url + "</notify_url>"
+                + "<notify_url>" + wxPayConfig.getNotifyUrl() + "</notify_url>"
                 + "<openid>" + user.getOpenId() + "</openid>"
                 + "<out_trade_no>" + outTradeNo + "</out_trade_no>"
                 + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"

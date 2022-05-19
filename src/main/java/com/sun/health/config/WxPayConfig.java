@@ -14,6 +14,7 @@ public class WxPayConfig {
     private String apiV3Key;
     private String appSecret;
     private String appid;
+    private String notifyUrl;
 
     public String getKey() {
         return key;
@@ -69,5 +70,13 @@ public class WxPayConfig {
 
     public void setAppid(String appid) {
         this.appid = appid;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 }
