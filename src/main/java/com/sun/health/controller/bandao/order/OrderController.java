@@ -28,7 +28,7 @@ public class OrderController extends BaseController {
     @GetMapping("/list")
     public JsonRet<List<OrderMasterDto>> getOrderList(@CurrentUser UserEntity user) {
         List<OrderMasterDto> list = orderService.getOrderListWithGoods(user.getId());
-        list.forEach(master -> master.getGoods().forEach(good -> good.setLogo(imageConfig.getPath() + good.getId())));
+        list.forEach(master -> master.getGoods().forEach(good -> good.setLogo(imageConfig.getPath() + good.getGoodId())));
         return JsonRet.success(list);
     }
 
