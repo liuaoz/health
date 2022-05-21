@@ -37,24 +37,18 @@ public class OrderService extends AbstractService {
 
     @Autowired
     private OrderMasterRepository orderMasterRepository;
-
     @Autowired
     private OrderDetailRepository orderDetailRepository;
-
     @Autowired
     private WxPayService wxPayService;
-
     @Autowired
     private CartService cartService;
-
     @Autowired
     private UserAddressService userAddressService;
-
     @Autowired
     private GoodService goodService;
     @Autowired
     private WxPayConfig wxPayConfig;
-
     @Autowired
     private YunPianService yunPianService;
     @Autowired

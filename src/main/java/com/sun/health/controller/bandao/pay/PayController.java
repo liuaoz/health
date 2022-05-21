@@ -1,15 +1,15 @@
 package com.sun.health.controller.bandao.pay;
 
-import com.sun.health.comm.Const;
 import com.sun.health.comm.WxPayNotice;
 import com.sun.health.controller.BaseController;
-import com.sun.health.core.comm.JsonRet;
 import com.sun.health.core.util.JsonUtil;
 import com.sun.health.dto.bandao.pay.wx.EncryptedRespDto;
-import com.sun.health.service.bandao.WxPayService;
 import com.sun.health.service.bandao.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/pay")
@@ -17,7 +17,6 @@ public class PayController extends BaseController {
 
     @Autowired
     private OrderService orderService;
-
 
     /**
      * 支付成功，微信回调

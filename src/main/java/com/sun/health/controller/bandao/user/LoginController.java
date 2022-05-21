@@ -2,6 +2,7 @@ package com.sun.health.controller.bandao.user;
 
 import com.sun.health.controller.BaseController;
 import com.sun.health.core.comm.JsonRet;
+import com.sun.health.core.util.StringUtil;
 import com.sun.health.dto.bandao.user.LoginDto;
 import com.sun.health.service.bandao.login.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,13 @@ public class LoginController extends BaseController {
     @PostMapping
     public JsonRet<String> login(@RequestBody LoginDto dto) {
 
+        logger.info("login.code--->{}", dto.getCode());
+
         String token = loginService.login(dto.getCode());
+
+        if (StringUtil.isEmpty(token)) {
+            return JsonRet.fail();
+        }
 
         return JsonRet.success(token);
     }
