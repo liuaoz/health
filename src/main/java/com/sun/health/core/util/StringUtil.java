@@ -1,11 +1,14 @@
 package com.sun.health.core.util;
 
+import com.sun.health.core.comm.Constant;
 import com.sun.health.core.comm.DataHolder;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +20,33 @@ import java.util.regex.Pattern;
  * @since : 2021/8/22
  **/
 public final class StringUtil {
+
+    public static void main(String[] args) {
+        String template = "【日道科技】内部通知，订单编号：#orderNo#,物流信息: #receiveInfo#";
+//        String template = "【日道科技】内部通知，订单编号：${orderNo},物流信息: ${receiveInfo}";
+        Map<String, String> params = new HashMap<>();
+        params.put("orderNo", "123456");
+        params.put("receiveInfo", "phone:18721882290");
+
+        String result = format(template, params, Constant.REGEX_POUND);
+        System.out.println(result);
+    }
+
+    public static String format(String template, Map<String, String> params, String regex) {
+        StringBuilder sb = new StringBuilder();
+
+        Matcher m = Pattern.compile(regex).matcher(template);
+
+        while (m.find()) {
+            String paramName = m.group();
+
+            String paramValue = params.get(paramName.substring(1, paramName.length() - 1));
+
+            m.appendReplacement(sb, isEmpty(paramValue) ? Strings.EMPTY : paramValue);
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
 
     public static boolean isEmpty(String str) {
         return str == null || str.isEmpty() || str.isBlank();
@@ -128,12 +158,4 @@ public final class StringUtil {
         }
         return list;
     }
-
-    public static void main(String[] args) {
-
-        List<String> list = sub("上大阳光乾静园", 2);
-
-        System.out.println(list);
-    }
-
 }

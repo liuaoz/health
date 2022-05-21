@@ -3,13 +3,13 @@ package com.sun.health.service.bandao.order;
 import com.sun.health.comm.Const;
 import com.sun.health.comm.OrderStatus;
 import com.sun.health.config.WxPayConfig;
+import com.sun.health.config.YunPianConfig;
+import com.sun.health.core.comm.Constant;
 import com.sun.health.core.util.DateUtil;
 import com.sun.health.core.util.SafeUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.dto.bandao.order.OrderDetailDto;
 import com.sun.health.dto.bandao.order.OrderMasterDto;
-import com.sun.health.dto.bandao.order.PrePayDto;
-import com.sun.health.dto.bandao.pay.PayOrderDto;
 import com.sun.health.dto.bandao.pay.UnifiedOrderRespDto;
 import com.sun.health.entity.bandao.address.UserAddressEntity;
 import com.sun.health.entity.bandao.cart.CartEntity;
@@ -23,6 +23,7 @@ import com.sun.health.service.bandao.WxPayService;
 import com.sun.health.service.bandao.address.UserAddressService;
 import com.sun.health.service.bandao.cart.CartService;
 import com.sun.health.service.bandao.good.GoodService;
+import com.sun.health.service.sms.YunPianService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -53,6 +54,11 @@ public class OrderService extends AbstractService {
     private GoodService goodService;
     @Autowired
     private WxPayConfig wxPayConfig;
+
+    @Autowired
+    private YunPianService yunPianService;
+    @Autowired
+    private YunPianConfig yunPianConfig;
 
     /**
      * 获取订单
@@ -142,6 +148,11 @@ public class OrderService extends AbstractService {
             //修改订单状态为已完成
             order.setStatus(OrderStatus.PAID.getCode());
             orderMasterRepository.save(order);
+            //发送短信给管理员
+            Map<String, String> params = new HashMap<>();
+            params.put("orderNo", orderNo);
+            params.put("receiveInfo", "收件人手机号：" + order.getPhone() + ",地址：" + order.getAddress());
+            yunPianService.sendSingle(Const.ADMIN_MOBILE, StringUtil.format(YunPianConfig.TEMPLATE, params, Constant.REGEX_POUND));
         } else {
             logger.warn("订单号：{},订单状态为{}。支付通知不做任何处理。", orderNo, order.getStatus());
         }

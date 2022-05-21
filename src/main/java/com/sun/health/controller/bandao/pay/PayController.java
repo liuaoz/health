@@ -46,7 +46,7 @@ public class PayController extends BaseController {
      * <return_msg><![CDATA[OK]]></return_msg>
      * </xml>
      */
-    @PostMapping(value = Const.NOTIFY_URL, consumes = "text/xml", produces = "text/xml")
+    @PostMapping(value = "notify", consumes = "text/xml", produces = "text/xml")
     public String notify(@RequestBody EncryptedRespDto dto) {
         logger.warn("wx pay notify->{}", JsonUtil.toJson(dto));
         if (WxPayNotice.SUCCESS.name().equals(dto.getReturn_code())

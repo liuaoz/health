@@ -54,3 +54,7 @@ wx:
   appid: ${WX_APP_ID:xx}
   appSecret: ${WX_APP_SECRET:xx}
   notifyUrl: ${WX_NOTIFY_URL:xx}
+
+sms:
+  yunpian:
+    apikey: ${YUN_PIAN_API_KEY:xx}
