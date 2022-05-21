@@ -145,7 +145,7 @@ public class OrderService extends AbstractService {
             //发送短信给管理员
             Map<String, String> params = new HashMap<>();
             params.put("orderNo", orderNo);
-            params.put("receiveInfo", "收件人手机号：" + order.getPhone() + ",地址：" + order.getAddress());
+            params.put("receiveInfo", "手机号：" + order.getPhone());
             yunPianService.sendSingle(Const.ADMIN_MOBILE, StringUtil.format(YunPianConfig.TEMPLATE, params, Constant.REGEX_POUND));
         } else {
             logger.warn("订单号：{},订单状态为{}。支付通知不做任何处理。", orderNo, order.getStatus());
