@@ -4,7 +4,6 @@ import com.sun.health.core.comm.CheckSumAlgoType;
 import com.sun.health.core.util.FileUtil;
 import com.sun.health.core.util.SafeUtil;
 import com.sun.health.core.util.StringUtil;
-import com.sun.health.entity.bandao.cart.CartEntity;
 import com.sun.health.entity.bandao.file.FileEntity;
 import com.sun.health.entity.bandao.good.GoodEntity;
 import com.sun.health.entity.bandao.good.GoodImageEntity;
@@ -20,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GoodService extends AbstractService {
@@ -41,7 +39,8 @@ public class GoodService extends AbstractService {
      * 商品列表
      */
     public List<GoodEntity> getGoods() {
-        return goodRepository.findAll();
+//        return goodRepository.findAll();
+        return goodRepository.findBySaleable(true);
     }
 
     /**
