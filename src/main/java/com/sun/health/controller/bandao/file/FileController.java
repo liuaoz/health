@@ -44,7 +44,7 @@ public class FileController extends BaseController {
         try {
             writer = resp.getWriter();
             writer.write(new String(fileEntity.getContent()));
-            resp.setContentType(fileEntity.getFileType());
+            resp.setContentType(fileEntity.getFileType()+";charset=utf8-8");
             writer.flush();
         } catch (IOException e) {
             logger.error("download file error.", e);
