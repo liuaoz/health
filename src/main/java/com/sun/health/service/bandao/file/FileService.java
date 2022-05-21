@@ -1,7 +1,9 @@
 package com.sun.health.service.bandao.file;
 
+import com.sun.health.comm.FileCategory;
 import com.sun.health.core.comm.CheckSumAlgoType;
 import com.sun.health.core.util.FileUtil;
+import com.sun.health.core.util.JsonUtil;
 import com.sun.health.core.util.SafeUtil;
 import com.sun.health.core.util.StringUtil;
 import com.sun.health.entity.bandao.file.FileEntity;
@@ -13,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FileService extends AbstractService {
@@ -26,6 +31,11 @@ public class FileService extends AbstractService {
 
     public void save(FileEntity entity) {
         fileRepository.save(entity);
+    }
+
+    public List<FileEntity> getByFileCategoryWithoutContent(FileCategory fileCategory) {
+        List<Map<String, Object>> mapList = fileRepository.findSimpleByFileCategory(fileCategory.name());
+        return mapList.stream().map(t -> JsonUtil.fromJson(JsonUtil.toJson(t), FileEntity.class)).collect(Collectors.toList());
     }
 
     public boolean uploadFile(MultipartFile file) {

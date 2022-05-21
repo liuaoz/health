@@ -23,6 +23,8 @@ public class FileEntity extends BaseEntity {
     @Column(columnDefinition = "mediumblob")
     private byte[] content;
 
+    private String category;
+
     public String getFileName() {
         return fileName;
     }
@@ -69,5 +71,13 @@ public class FileEntity extends BaseEntity {
 
     public void setContent(byte[] content) {
         this.content = content;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

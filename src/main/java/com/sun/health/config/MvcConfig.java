@@ -28,11 +28,12 @@ public class MvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/good/list")
                 .excludePathPatterns("/file/image/*")
                 .excludePathPatterns("/housingEstate/**")
+                .excludePathPatterns("/home/**")
         ;
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-       resolvers.add(currentUserArgumentResolver);
+        resolvers.add(currentUserArgumentResolver);
     }
 }
