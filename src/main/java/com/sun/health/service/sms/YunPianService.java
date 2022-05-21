@@ -1,8 +1,6 @@
 package com.sun.health.service.sms;
 
 import com.sun.health.config.YunPianConfig;
-import com.sun.health.core.comm.Constant;
-import com.sun.health.core.util.StringUtil;
 import com.sun.health.service.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +10,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class YunPianService extends AbstractService {
