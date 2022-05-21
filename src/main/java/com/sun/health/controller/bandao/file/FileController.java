@@ -9,6 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/file")
 public class FileController extends BaseController {
@@ -29,6 +34,25 @@ public class FileController extends BaseController {
             }
         }
         return JsonRet.success(result);
+    }
+
+    @GetMapping(value = "/{fileId}")
+    public void download(@PathVariable Long fileId, HttpServletResponse resp) {
+
+        FileEntity fileEntity = fileService.findById(fileId);
+        PrintWriter writer = null;
+        try {
+            writer = resp.getWriter();
+            writer.write(new String(fileEntity.getContent()));
+            resp.setContentType(fileEntity.getFileType());
+            writer.flush();
+        } catch (IOException e) {
+            logger.error("download file error.", e);
+        } finally {
+            if (Objects.nonNull(writer)) {
+                writer.close();
+            }
+        }
     }
 
     /**
