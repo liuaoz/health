@@ -28,15 +28,15 @@ public class HomeController extends BaseController {
         HomeItemDto shopping = new HomeItemDto("特产", 30L);
         shopping.setId(1L);
 
-        HomeItemDto swimming = new HomeItemDto("游泳", 31L);
-        swimming.setId(2L);
-
-        HomeItemDto fishing = new HomeItemDto("钓鱼", 29L);
-        fishing.setId(3L);
+//        HomeItemDto swimming = new HomeItemDto("游泳", 31L);
+//        swimming.setId(2L);
+//
+//        HomeItemDto fishing = new HomeItemDto("钓鱼", 29L);
+//        fishing.setId(3L);
 
         list.add(shopping);
-        list.add(swimming);
-        list.add(fishing);
+//        list.add(swimming);
+//        list.add(fishing);
 
         return JsonRet.success(list);
     }
